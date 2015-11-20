@@ -2,6 +2,9 @@
   "name": "FullstackGeneratedApp",
   "version": "1.0.0",
   "description": "A generated project at Fullstack Academy",
+  "engines": {
+    "node": "5.1.0"
+  },
   "main": "server/start.js",
   "scripts": {
     "start": "nodemon --watch server -e js,html server/start.js",
@@ -34,7 +37,7 @@
     "gulp-ng-annotate": "^0.5.2",
     "gulp-plumber": "^0.6.6",
     "gulp-rename": "^1.2.0",
-    "gulp-sass": "^1.3.3",
+    "gulp-sass": "^2.1.0",
     "gulp-sourcemaps": "^1.3.0",
     "gulp-uglify": "^1.1.0",
     "karma": "^0.12.31",
@@ -53,11 +56,17 @@
     "passport-google-oauth": "^0.1.5",
     "passport-local": "^1.0.0",
     "passport-twitter": "^1.0.2",
+    "react-native": "^0.14.2",
     "run-sequence": "^1.0.2",
     "serve-favicon": "^2.2.0",
     "sinon": "^1.13.0",
     "socket.io": "^1.3.4",
     "socket.io-client": "^1.3.5",
     "supertest": "^0.15.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nyczmagix/nomz.git"
   }
 }
