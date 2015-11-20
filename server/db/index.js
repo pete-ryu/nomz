@@ -1,9 +1,7 @@
 'use strict';
 var Promise = require('bluebird');
-var path = require('path');
 var chalk = require('chalk');
 
-// var DATABASE_URI = require(path.join(__dirname, '../env')).DATABASE_URI;
 var DATABASE_URI = process.env.MONGOURI;
 
 var mongoose = require('mongoose');
