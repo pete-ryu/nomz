@@ -1,8 +1,13 @@
 'use strict';
 var crypto = require('crypto');
 var mongoose = require('mongoose');
+var ObjectId = mongoose.Schema.Types.ObjectId;
 
 var schema = new mongoose.Schema({
+    _id: {
+        type: String,
+        unique: true
+    }
     email: {
         type: String
     },
@@ -12,17 +17,8 @@ var schema = new mongoose.Schema({
     salt: {
         type: String
     },
-    twitter: {
-        id: String,
-        username: String,
-        token: String,
-        tokenSecret: String
-    },
-    facebook: {
-        id: String
-    },
-    google: {
-        id: String
+    posts: {
+        type: ObjectId // need to include reference to menu item
     }
 });
 
