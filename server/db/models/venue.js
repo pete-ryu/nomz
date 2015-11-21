@@ -9,7 +9,10 @@ var schema = new mongoose.Schema({
   },
   address: {
     type: String
-  }, // Or should this be a separate schema
+  }, 
+  zipCode: {
+    type: String
+  },
   phone: {
     type: String
   },
@@ -17,7 +20,8 @@ var schema = new mongoose.Schema({
     type: String
   },
   location: {
-    type: [Number]
+    // Lat and Long coordinates
+    type: [Number] 
   },
   description: {
     type: String
@@ -27,9 +31,9 @@ var schema = new mongoose.Schema({
   },
   menuItems: [{
     type: ObjectId,
-    ref: 'menuItem'
+    ref: 'MenuItem'
   }]
 })
 
 
-mongoose.model('venue', schema);
+mongoose.model('Venue', schema);

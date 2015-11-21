@@ -2,12 +2,13 @@
 var crypto = require('crypto');
 var mongoose = require('mongoose');
 var ObjectId = mongoose.Schema.Types.ObjectId;
+var shortId = require('shortid');
 
 var schema = new mongoose.Schema({
-    _id: {
+    _id: { // Foursquare Token
         type: String,
         unique: true
-    }
+    },
     email: {
         type: String
     },
@@ -17,8 +18,35 @@ var schema = new mongoose.Schema({
     salt: {
         type: String
     },
-    posts: {
-        type: ObjectId // need to include reference to menu item
+    posts: [{
+        _id: {
+            type: String,
+            default: shortId.generate
+        },
+        imageUrl: {
+          type: String
+        },
+        // author: { // Only if we're making this a separate collection...
+        //   type: ObjectId,
+        //   ref: 'User'
+        // },
+        date: {
+          type: Date,
+          default: Date.now
+        },
+        caption: {
+          type: String
+        },
+        likes: {
+          type: Number
+        },
+        menuItem: {
+          type: ObjectId,
+          ref: 'MenuItem'
+        }
+    }],
+    tags: {
+      type: [String]
     }
 });
 

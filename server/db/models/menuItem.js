@@ -4,25 +4,20 @@ var mongoose = require('mongoose');
 var ObjectId = mongoose.Schema.Types.ObjectId;
 
 var schema = new mongoose.Schema({
-  image: {
-    url: {
-      type: String
-    },
-    author: {
-      type: ObjectId,
-      ref: 'User'
-    },
-    date: {
-      type: Date,
-      default: new Date
-    }
+  name: {
+    type: String
+  },
+  category: {
+    type: String
+  },
+  imageUrl: {
+    type: String
   },
   venue: {
-    type: ObjectId,
-    ref: 'Venue'
+    type: String
   },
   rating: {
-    type: String,
+    type: String
   },
   tags: {
     type: [String]
@@ -30,4 +25,4 @@ var schema = new mongoose.Schema({
   
 })
 
-mongoose.model('menuItem', schema);
+mongoose.model('MenuItem', schema);
