@@ -1,8 +1,14 @@
 'use strict';
 var crypto = require('crypto');
 var mongoose = require('mongoose');
+var ObjectId = mongoose.Schema.Types.ObjectId;
+var shortId = require('shortid');
 
 var schema = new mongoose.Schema({
+    _id: { // Foursquare Token
+        type: String,
+        unique: true
+    },
     email: {
         type: String
     },
@@ -12,17 +18,35 @@ var schema = new mongoose.Schema({
     salt: {
         type: String
     },
-    twitter: {
-        id: String,
-        username: String,
-        token: String,
-        tokenSecret: String
-    },
-    facebook: {
-        id: String
-    },
-    google: {
-        id: String
+    posts: [{
+        _id: {
+            type: String,
+            default: shortId.generate
+        },
+        imageUrl: {
+          type: String
+        },
+        // author: { // Only if we're making this a separate collection...
+        //   type: ObjectId,
+        //   ref: 'User'
+        // },
+        date: {
+          type: Date,
+          default: Date.now
+        },
+        caption: {
+          type: String
+        },
+        likes: {
+          type: Number
+        },
+        menuItem: {
+          type: ObjectId,
+          ref: 'MenuItem'
+        }
+    }],
+    tags: {
+      type: [String]
     }
 });
 
