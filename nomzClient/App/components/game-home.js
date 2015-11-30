@@ -1,6 +1,5 @@
 var React = require('react-native');
 var Meal = require('./Meal');
-// var GamePlay = require('./game-play.js');
 var Card = require('./game-play.js');
 
 var {
@@ -52,7 +51,6 @@ class Game extends Component {
             selected={ this.state.selectedTab === 'tabThree'}
             onPress={ () => this.setTab('tabThree') }>
             <Card />
-
           </TabBarIOS.Item>
         </TabBarIOS>
     )
