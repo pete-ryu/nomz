@@ -24,6 +24,7 @@ var Application = React.createClass({
   getInitialState: function() {
     return {
       loaded: false,
+      connectError: false,
       gameSources: [],
       currentImage: {},
       answeredCount: 0,
@@ -44,6 +45,10 @@ var Application = React.createClass({
   },
 
   fetchSourceData: function() {
+    var game_url = GAME_DATA_URL;
+    if(this.props.mealType) {
+      game_url += "/" + this.props.mealType;
+    }
     fetch(GAME_DATA_URL)
     .then((response) => response.json())
     .then((response) => {
@@ -53,6 +58,12 @@ var Application = React.createClass({
         loaded: true
       });
       this.advanceImage();
+    })
+    .catch((err) => {
+      console.log("Error connecting to server!");
+      this.setState({
+        connectError: true
+      });
     })
     .done();
   },
@@ -96,8 +107,8 @@ var Application = React.createClass({
       });
     }
 
-    var left = xPos < (windowWidth/2),
-        displayText = left ? 'Released left' : 'Released right';
+    var liked = xPos > (windowWidth/2),
+        displayText = liked ? 'Released right' : 'Released left';
     this.setState({
       answeredCount: ++this.state.answeredCount,
       x: 0,
@@ -106,7 +117,7 @@ var Application = React.createClass({
     })
 
     // update preferences
-    this.savePreference(!left);
+    this.savePreference(liked);
     // now load next image
     this.advanceImage();
   },
@@ -157,17 +168,20 @@ var Application = React.createClass({
 
   render: function() {
     if(!this.state.loaded) {
-      return this.renderLoadingView();
+      if(this.state.connectError)
+        return this.renderMessageView("Error connecting to server");
+      else
+        return this.renderMessageView("Loading...");
     }
     return this.renderCard();
   },
 
-  renderLoadingView: function() {
+  renderMessageView: function(text) {
     return (
       <View style={styles.container}>
         <View style={{ marginTop: 65 }}></View>
         <View style={styles.box}>
-          <Text style={styles.myText}>Loading...</Text>
+          <Text style={styles.myText}>{text}</Text>
         </View>
       </View>
     )
