@@ -93,13 +93,12 @@ var Application = React.createClass({
   resetPosition: function(e) {
     this.dragging = false;
 
-    var tolerance = 0.25;
     var xPos = e.nativeEvent.pageX;
     var windowWidth = windowSize.width;
-    var toleranceMax = (windowWidth * (1+tolerance))/2;
-    var toleranceMin = (windowWidth * (1-tolerance))/2;
-    if( (xPos < toleranceMax) && (xPos > toleranceMin) ) {
-      // released in middle section of screen
+    var tolerance = 0.15;
+    var xDelta = Math.abs(this.dragStart.x - xPos);
+    if( (tolerance*windowWidth) > xDelta ) {
+      // didn't move image far enough
       // doesnt count as a swipe, just reset the image to center
       return this.setState({
         x: 0,
@@ -158,7 +157,12 @@ var Application = React.createClass({
     this.drag = {
       x: e.nativeEvent.pageX,
       y: e.nativeEvent.pageY
-    }
+    };
+    // save start position so we can calculate total change
+    this.dragStart = {
+      x: e.nativeEvent.pageX,
+      y: e.nativeEvent.pageY
+    };
     return true;
   },
 
