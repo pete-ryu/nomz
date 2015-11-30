@@ -81,7 +81,22 @@ var Application = React.createClass({
 
   resetPosition: function(e) {
     this.dragging = false;
-    var left = e.nativeEvent.pageX < (windowSize.width/2),
+
+    var tolerance = 0.25;
+    var xPos = e.nativeEvent.pageX;
+    var windowWidth = windowSize.width;
+    var toleranceMax = (windowWidth * (1+tolerance))/2;
+    var toleranceMin = (windowWidth * (1-tolerance))/2;
+    if( (xPos < toleranceMax) && (xPos > toleranceMin) ) {
+      // released in middle section of screen
+      // doesnt count as a swipe, just reset the image to center
+      return this.setState({
+        x: 0,
+        y: 0,
+      });
+    }
+
+    var left = xPos < (windowWidth/2),
         displayText = left ? 'Released left' : 'Released right';
     this.setState({
       answeredCount: ++this.state.answeredCount,
