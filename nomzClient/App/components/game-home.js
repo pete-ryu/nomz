@@ -1,5 +1,7 @@
 var React = require('react-native');
 var Meal = require('./Meal');
+// var GamePlay = require('./game-play.js');
+var Card = require('./game-play.js');
 
 var {
   Text,
@@ -28,12 +30,10 @@ class Game extends Component {
 
 
   render() {
-
-    console.log("hello")
     return (
-        <TabBarIOS
-          tintColor='red'>
-          <TabBarIOS.Item 
+
+        <TabBarIOS tintColor='red' >
+          <TabBarIOS.Item
             systemIcon='history'
             selected={ this.state.selectedTab === 'tabOne'}
             onPress={ () => this.setTab('tabOne') }>
@@ -41,25 +41,22 @@ class Game extends Component {
               <Text style={styles.tabText}> Tab One </Text>
             </View>
           </TabBarIOS.Item>
-          <TabBarIOS.Item 
+          <TabBarIOS.Item
             systemIcon='search'
             selected={ this.state.selectedTab === 'tabTwo'}
             onPress={ () => this.setTab('tabTwo') }>
             <Meal />
           </TabBarIOS.Item>
-          <TabBarIOS.Item 
+          <TabBarIOS.Item
             systemIcon='more'
             selected={ this.state.selectedTab === 'tabThree'}
             onPress={ () => this.setTab('tabThree') }>
-            <View style={styles.tabContent}>
-              <Text style={styles.tabText}> Tab Three </Text>
-            </View>
+            <Card />
+
           </TabBarIOS.Item>
         </TabBarIOS>
     )
   }
-
-
 }
 
 var styles = StyleSheet.create({
@@ -80,7 +77,6 @@ var styles = StyleSheet.create({
     textAlign: 'center',
     color: 'green'
   }
-})
-
+});
 
 module.exports = Game;
