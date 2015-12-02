@@ -5,7 +5,8 @@
 'use strict';
 
 var React = require('react-native');
-var Game = require('./App/components/game-home')
+// var Game = require('./App/components/game-home');
+var Meal = require('./App/components/Meal');
 
 var {
   AppRegistry,
@@ -24,7 +25,8 @@ class nomzClient extends Component{
         style={styles.container}
         initialRoute = {{
           title: 'Find Food',
-          component: Game
+          description: 'Start by selecting the type of meal you are interested in',
+          component: Meal
         }} />
     )
   }
