@@ -5,18 +5,24 @@ var {
   View,
   Text,
   Image,
-  TouchableHighlight
+  TouchableHighlight,
+  TouchableOpacity
 } = React;
 
 class Meal extends React.Component {
+  clickMe() {
+    alert('Clicked');
+  }
 
   render() {
     return (
       <View style={styles.container}>
         <View style={{ marginTop: 65 }}></View>
         <View style={styles.halfHeight}>
-          <View style={styles.box}>
+          <View style={styles.box} >
+            <TouchableOpacity onPress={this.clickMe.bind(this)}>
             <Text style={styles.myText}>Breakfast</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.box}>
             <Text style={styles.myText}>Lunch</Text>

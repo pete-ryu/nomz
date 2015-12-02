@@ -55,7 +55,8 @@ var Application = React.createClass({
       this.setState({
         gameSources: this.state.gameSources.concat(response),
         // gameSources: response,
-        loaded: true
+        loaded: true,
+        connectError: false
       });
       this.advanceImage();
     })
