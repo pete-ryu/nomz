@@ -10,19 +10,27 @@ var {
 } = React;
 
 class Meal extends React.Component {
+<<<<<<< HEAD
   clickMe() {
     alert('Clicked');
   }
+=======
+>>>>>>> c4799d5cd40182f975d08a7f8c4bf86452b57cb6
 
   render() {
     return (
       <View style={styles.container}>
         <View style={{ marginTop: 65 }}></View>
         <View style={styles.halfHeight}>
+<<<<<<< HEAD
           <View style={styles.box} >
             <TouchableOpacity onPress={this.clickMe.bind(this)}>
             <Text style={styles.myText}>Breakfast</Text>
             </TouchableOpacity>
+=======
+          <View style={styles.box}>
+            <Text style={styles.myText}>Breakfast</Text>
+>>>>>>> c4799d5cd40182f975d08a7f8c4bf86452b57cb6
           </View>
           <View style={styles.box}>
             <Text style={styles.myText}>Lunch</Text>
