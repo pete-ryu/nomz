@@ -13,7 +13,8 @@ var {
   Text,
   View,
   Component,
-  NavigatorIOS
+  NavigatorIOS,
+  Navigator
 } = React;
 
 class nomzClient extends Component{
