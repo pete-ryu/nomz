@@ -6,6 +6,7 @@
 var React = require('react-native');
 
 var Results = require('./game-results.js');
+var Button = require('./react-native-button');
 var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
 var {
@@ -19,6 +20,7 @@ var {
 } = React;
 
 const GAME_DATA_URL = 'http://localhost:1337/api/mock';
+const MIN_NUM_SWIPES = 20;
 
 var Application = React.createClass({
   getInitialState: function() {
@@ -34,11 +36,9 @@ var Application = React.createClass({
       },
       x: 0,
       y: 0,
-
-      // remove below
+      // not using Yes and No counts yet, but could be useful in the future
       Yes: 0,
-      No: 0,
-      lastDragDirection: 'Drag and Release'
+      No: 0
     }
   },
 
@@ -81,7 +81,7 @@ var Application = React.createClass({
     this.setState({
       currentImageUrl: next[0].url,
       currentImageTags: next[0].tags,
-      answeredCount: this.state.answeredCount++
+      // answeredCount: ++this.state.answeredCount
     })
   },
 
@@ -109,16 +109,13 @@ var Application = React.createClass({
         y: 0,
       });
     }
-
-    var liked = xPos > (windowWidth/2),
-        displayText = liked ? 'Released right' : 'Released left';
+    // swiped far enough to count
+    var liked = xPos > (windowWidth/2)
     this.setState({
       answeredCount: ++this.state.answeredCount,
       x: 0,
-      y: 0,
-      lastDragDirection: displayText
+      y: 0
     })
-
     // update preferences
     this.savePreference(liked);
     // now load next image
@@ -226,9 +223,14 @@ var Application = React.createClass({
             <Text>{this.state.No}</Text>
           </View>
           <View style={styles.resultsButton}>
-            <TouchableOpacity onPress={this.goToResults}>
-              <Text>Go to  your Matches!</Text>
-            </TouchableOpacity>
+            <Button
+              style={styles.matchesBtn}
+              styleDisabled={styles.machesBtnDisable}
+              onPress={this.goToResults}
+              disabled={this.state.answeredCount < MIN_NUM_SWIPES}
+            >
+              Go to your Matches!
+            </Button>
           </View>
       </View>
     );
@@ -247,9 +249,8 @@ var styles = StyleSheet.create({
     left: 0
   },
   resultsButton: {
-    position: 'absolute',
-    bottom: 65,
-    left: 40
+    alignItems:'center',
+    top: 65
   },
   card: {
     borderWidth: 3,
@@ -271,6 +272,18 @@ var styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
     top: 0
+  },
+
+  matchesBtn: {
+    fontSize: 20,
+    color: 'black',
+    padding: 10,
+    borderWidth: 3,
+    borderRadius: 5
+  },
+  machesBtnDisable: {
+    color: 'grey',
+    borderColor: 'grey'
   }
 });
 
