@@ -49,9 +49,9 @@ var Application = React.createClass({
   fetchSourceData: function() {
     var game_url = GAME_DATA_URL;
     console.log("meal type:",this.props.mealType)
-    // if(this.props.mealType) {
-    //   game_url += "/" + this.props.mealType;
-    // }
+    if(this.props.mealType) {
+      game_url += "?meal=" + this.props.mealType;
+    }
     fetch(game_url)
     .then((response) => response.json())
     .then((response) => {
@@ -179,6 +179,14 @@ var Application = React.createClass({
     });
   },
 
+  matchBtnText: function() {
+    var remaining = MIN_NUM_SWIPES-this.state.answeredCount;
+    if(remaining>0) {
+      return "Swipe " + remaining + " more dishes";
+    }
+    return "Go to your Matches!";
+  },
+
   render: function() {
     if(!this.state.loaded) {
       if(this.state.connectError)
@@ -229,7 +237,7 @@ var Application = React.createClass({
               onPress={this.goToResults}
               disabled={this.state.answeredCount < MIN_NUM_SWIPES}
             >
-              Go to your Matches!
+              {this.matchBtnText()}
             </Button>
           </View>
       </View>
@@ -261,7 +269,7 @@ var styles = StyleSheet.create({
     padding: 10
   },
   cardImage: {
-    height: 260,
+    height: 274,
   },
   textLeft: {
     position: 'absolute',
