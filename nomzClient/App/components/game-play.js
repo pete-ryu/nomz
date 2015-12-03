@@ -4,18 +4,18 @@
 
 'use strict';
 var React = require('react-native');
+
+var Results = require('./game-results.js');
 var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
 var {
-  StyleSheet,
-  AppRegistry,
-  Text,
-  View,
-  ActivityIndicatorIOS,
+  // Animation,
   Image,
-  Navigator,
+  NavigatorIOS,
+  StyleSheet,
+  Text,
   TouchableOpacity,
-  Animation
+  View
 } = React;
 
 const GAME_DATA_URL = 'http://localhost:1337/api/mock';
@@ -32,10 +32,12 @@ var Application = React.createClass({
         likes: {},
         dislikes: {}
       },
-      Yes: 0,
-      No: 0,
       x: 0,
       y: 0,
+
+      // remove below
+      Yes: 0,
+      No: 0,
       lastDragDirection: 'Drag and Release'
     }
   },
@@ -46,10 +48,11 @@ var Application = React.createClass({
 
   fetchSourceData: function() {
     var game_url = GAME_DATA_URL;
-    if(this.props.mealType) {
-      game_url += "/" + this.props.mealType;
-    }
-    fetch(GAME_DATA_URL)
+    console.log("meal type:",this.props.mealType)
+    // if(this.props.mealType) {
+    //   game_url += "/" + this.props.mealType;
+    // }
+    fetch(game_url)
     .then((response) => response.json())
     .then((response) => {
       this.setState({
@@ -171,6 +174,14 @@ var Application = React.createClass({
     return true;
   },
 
+  goToResults: function() {
+    this.props.navigator.push({
+      title: 'Restaurant Matches',
+      component: Results,
+      backButtonTitle: 'Review Dishes'
+    });
+  },
+
   render: function() {
     if(!this.state.loaded) {
       if(this.state.connectError)
@@ -206,10 +217,6 @@ var Application = React.createClass({
               source={{ uri: this.state.currentImageUrl }}
               style={styles.cardImage}
             />
-            <View style={styles.cardTextContainer}>
-              <Text style={styles.textLeft}>Rabbit, 10</Text>
-              <Text style={styles.textRight}>1 Connection</Text>
-            </View>
           </View>
           <View>
             <Text>{this.state.currentImageUrl}</Text>
@@ -218,8 +225,10 @@ var Application = React.createClass({
             <Text>{this.state.Yes}</Text>
             <Text>{this.state.No}</Text>
           </View>
-          <View style={styles.dragText}>
-            <Text>{this.state.lastDragDirection}</Text>
+          <View style={styles.resultsButton}>
+            <TouchableOpacity onPress={this.goToResults}>
+              <Text>Go to  your Matches!</Text>
+            </TouchableOpacity>
           </View>
       </View>
     );
@@ -236,6 +245,11 @@ var styles = StyleSheet.create({
     position: 'absolute',
     bottom: 65,
     left: 0
+  },
+  resultsButton: {
+    position: 'absolute',
+    bottom: 65,
+    left: 40
   },
   card: {
     borderWidth: 3,

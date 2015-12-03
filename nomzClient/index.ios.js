@@ -22,6 +22,7 @@ class nomzClient extends Component{
   render() {
     return (
       <NavigatorIOS
+        ref = "nav"
         style={styles.container}
         initialRoute = {{
           title: 'Find Food',
