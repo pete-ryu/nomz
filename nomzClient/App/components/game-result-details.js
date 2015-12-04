@@ -1,4 +1,5 @@
 'use strict';
+const API_ROUTE = 'http://localhost:1337/api/venue/';
 
 var React = require('react-native');
 
@@ -28,7 +29,7 @@ class GameResultDetails extends Component {
     }
 
     componentDidMount() {
-        var url = 'http://localhost:1337/api/venue/' + this.state.rowData.id;
+        var url = API_ROUTE + this.state.rowData.id;
         fetch(url)
             .then((res) => res.json())
             .then((resData) => {
@@ -58,7 +59,7 @@ class GameResultDetails extends Component {
                         { this.state.venueDetails.location.city + ', ' + this.state.venueDetails.location.state } { this.state.venueDetails.location.postalCode ? this.state.venueDetails.location.postalCode : ''  }
                         </Text>
                         <Text>
-                        
+
                         </Text>
                     </View>
                 </View>

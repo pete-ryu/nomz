@@ -4,21 +4,23 @@
 
 'use strict';
 var React = require('react-native');
+
+var Results = require('./game-results.js');
+var Button = require('./react-native-button');
 var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
 var {
-  StyleSheet,
-  AppRegistry,
-  Text,
-  View,
-  ActivityIndicatorIOS,
+  // Animation,
   Image,
-  Navigator,
+  NavigatorIOS,
+  StyleSheet,
+  Text,
   TouchableOpacity,
-  Animation
+  View
 } = React;
 
 const GAME_DATA_URL = 'http://localhost:1337/api/mock';
+const MIN_NUM_SWIPES = 20;
 
 var Application = React.createClass({
   getInitialState: function() {
@@ -32,11 +34,11 @@ var Application = React.createClass({
         likes: {},
         dislikes: {}
       },
-      Yes: 0,
-      No: 0,
       x: 0,
       y: 0,
-      lastDragDirection: 'Drag and Release'
+      // not using Yes and No counts yet, but could be useful in the future
+      Yes: 0,
+      No: 0
     }
   },
 
@@ -46,10 +48,11 @@ var Application = React.createClass({
 
   fetchSourceData: function() {
     var game_url = GAME_DATA_URL;
+    console.log("meal type:",this.props.mealType)
     if(this.props.mealType) {
-      game_url += "/" + this.props.mealType;
+      game_url += "?meal=" + this.props.mealType;
     }
-    fetch(GAME_DATA_URL)
+    fetch(game_url)
     .then((response) => response.json())
     .then((response) => {
       this.setState({
@@ -78,7 +81,7 @@ var Application = React.createClass({
     this.setState({
       currentImageUrl: next[0].url,
       currentImageTags: next[0].tags,
-      answeredCount: this.state.answeredCount++
+      // answeredCount: ++this.state.answeredCount
     })
   },
 
@@ -106,16 +109,13 @@ var Application = React.createClass({
         y: 0,
       });
     }
-
-    var liked = xPos > (windowWidth/2),
-        displayText = liked ? 'Released right' : 'Released left';
+    // swiped far enough to count
+    var liked = xPos > (windowWidth/2)
     this.setState({
       answeredCount: ++this.state.answeredCount,
       x: 0,
-      y: 0,
-      lastDragDirection: displayText
+      y: 0
     })
-
     // update preferences
     this.savePreference(liked);
     // now load next image
@@ -171,6 +171,22 @@ var Application = React.createClass({
     return true;
   },
 
+  goToResults: function() {
+    this.props.navigator.push({
+      title: 'Restaurant Matches',
+      component: Results,
+      backButtonTitle: 'Review Dishes'
+    });
+  },
+
+  matchBtnText: function() {
+    var remaining = MIN_NUM_SWIPES-this.state.answeredCount;
+    if(remaining>0) {
+      return "Swipe " + remaining + " more dishes";
+    }
+    return "Go to your Matches!";
+  },
+
   render: function() {
     if(!this.state.loaded) {
       if(this.state.connectError)
@@ -206,10 +222,6 @@ var Application = React.createClass({
               source={{ uri: this.state.currentImageUrl }}
               style={styles.cardImage}
             />
-            <View style={styles.cardTextContainer}>
-              <Text style={styles.textLeft}>Rabbit, 10</Text>
-              <Text style={styles.textRight}>1 Connection</Text>
-            </View>
           </View>
           <View>
             <Text>{this.state.currentImageUrl}</Text>
@@ -218,8 +230,15 @@ var Application = React.createClass({
             <Text>{this.state.Yes}</Text>
             <Text>{this.state.No}</Text>
           </View>
-          <View style={styles.dragText}>
-            <Text>{this.state.lastDragDirection}</Text>
+          <View style={styles.resultsButton}>
+            <Button
+              style={styles.matchesBtn}
+              styleDisabled={styles.machesBtnDisable}
+              onPress={this.goToResults}
+              disabled={this.state.answeredCount < MIN_NUM_SWIPES}
+            >
+              {this.matchBtnText()}
+            </Button>
           </View>
       </View>
     );
@@ -237,6 +256,10 @@ var styles = StyleSheet.create({
     bottom: 65,
     left: 0
   },
+  resultsButton: {
+    alignItems:'center',
+    top: 65
+  },
   card: {
     borderWidth: 3,
     borderRadius: 3,
@@ -246,7 +269,7 @@ var styles = StyleSheet.create({
     padding: 10
   },
   cardImage: {
-    height: 260,
+    height: 274,
   },
   textLeft: {
     position: 'absolute',
@@ -257,6 +280,18 @@ var styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
     top: 0
+  },
+
+  matchesBtn: {
+    fontSize: 20,
+    color: 'black',
+    padding: 10,
+    borderWidth: 3,
+    borderRadius: 5
+  },
+  machesBtnDisable: {
+    color: 'grey',
+    borderColor: 'grey'
   }
 });
 
