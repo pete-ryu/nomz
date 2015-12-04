@@ -15,7 +15,6 @@ var {
   View,
   Component,
   NavigatorIOS,
-  Navigator
 } = React;
 
 class nomzClient extends Component{
@@ -25,7 +24,8 @@ class nomzClient extends Component{
         ref = "nav"
         style={styles.container}
         initialRoute = {{
-          title: 'Find Food',
+          title: 'Nomz!',
+          backButtonTitle: 'meal type',
           description: 'Start by selecting the type of meal you are interested in',
           component: Meal
         }} />
