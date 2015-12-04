@@ -1,7 +1,7 @@
 'use strict';
-const API_ROUTE = 'http://localhost:1337/api/venue/';
 
 var React = require('react-native');
+const GOOGLE_MAPS_STATIC_API_KEY = 'AIzaSyBxQQR-fISGZgbA0YkjOqEJ4JLfzbaOrKA';
 
 var {
     StyleSheet,
@@ -22,14 +22,8 @@ class GameResultDetails extends Component {
         }
     }
 
-    getInitialState() {
-        return {
-            venueDetails: null,
-        };
-    }
-
     componentDidMount() {
-        var url = API_ROUTE + this.state.rowData.id;
+        var url = 'http://localhost:1337/api/venue/' + this.state.rowData.id;
         fetch(url)
             .then((res) => res.json())
             .then((resData) => {
@@ -47,19 +41,30 @@ class GameResultDetails extends Component {
             return this.renderLoadingView();
         }
 
+        var venueDetails = this.state.venueDetails,
+            venueImage = venueDetails.categories[0].icon.prefix.replace('ss3.4sqi.net', 'foursquare.com') + 'bg_64' + venueDetails.categories[0].icon.suffix,
+            lat = venueDetails.location.lat,
+            lng = venueDetails.location.lng,
+            gmapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=18&size=400x400&markers=color:red%7Clabel:C%7C${lat},${lng}&key=` + GOOGLE_MAPS_STATIC_API_KEY;
+
         return (
             <View style={styles.container}>
-                <View style={styles.venueDetailsContainer}>
-                    <Text style={styles.venueDetailsHeader}>
-                    { this.state.venueDetails.name }
+                <View style={styles.venueDetailsHeader}>
+                    <Text style={styles.venueDetailsHeaderText}>
+                    { venueDetails.name }
                     </Text>
+                    <Image style={styles.venueImage} source={{uri: venueImage }} />
+                </View>
+                <View style={styles.venueDetailsContainer}>
+                    <Image style={styles.venueMap} source={{ uri: gmapUrl }} />
                     <View style={styles.venueDetails}>
-                        <Text numberOfLines={2}>
-                        { this.state.venueDetails.location.address + '\n' }
-                        { this.state.venueDetails.location.city + ', ' + this.state.venueDetails.location.state } { this.state.venueDetails.location.postalCode ? this.state.venueDetails.location.postalCode : ''  }
+                        <Text style={styles.venueAddress}>
+                        { venueDetails.location.address + '\n' }
+                        { venueDetails.location.city + ', ' + venueDetails.location.state } { venueDetails.location.postalCode ? this.state.venueDetails.location.postalCode : ''  }
                         </Text>
-                        <Text>
-
+                        <Text >
+                        { venueDetails.location.crossStreet }
+                        { '\n' + venueDetails.contact.formattedPhone }
                         </Text>
                     </View>
                 </View>
@@ -83,34 +88,52 @@ var styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     container: {
         flex: 1,
-        justifyContent: 'center'
-    },
-    rowContent: {
-        flex: 1,
-        flexDirection: 'row',
-        paddingTop: 10,
-        paddingLeft: 10,
-        paddingBottom: 10,
-        borderColor: '#D7D7D7',
-        borderBottomWidth: 1
+        justifyContent: 'center',
+        marginHorizontal: 10
     },
     venueDetailsContainer: {
-        flexDirection: 'column',
         flex: 1,
-        marginTop: 70,
-        alignItems: 'center'
+        flexDirection: 'column',
+        alignItems: 'center',
+        borderWidth: 1,
+        marginBottom: 250,
+        borderColor: '#D7D7D7'
     },
     venueDetailsHeader: {
-        fontSize: 20,
+        fontSize: 25,
+        fontWeight: 'bold',
+        alignSelf: 'flex-start',
+        marginTop: 70,
+        flexDirection: 'row'
+    },
+    venueDetailsHeaderText: {
+        fontSize: 25,
         fontWeight: 'bold'
     },
     venueDetails: {
-        fontSize: 12,
-        alignItems: 'center'
+        flexDirection: 'column',
+        alignSelf: 'flex-start',
+        fontWeight: 'bold',
+        paddingHorizontal: 5
+    },
+    venueMap: {
+        justifyContent: 'center',
+        width: 345,
+        height: 200,
+        marginTop: 5
+    },
+    venueAddress: {
+        fontWeight: 'bold',
+        paddingTop: 5
+    },
+    venueImage: {
+        width: 20,
+        height: 20,
+        alignSelf: 'center',
     }
 })
 
