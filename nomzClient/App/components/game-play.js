@@ -7,6 +7,7 @@ var React = require('react-native');
 
 var Results = require('./game-results.js');
 var Button = require('./react-native-button');
+var color = require('./colors');
 var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
 var {
@@ -20,7 +21,7 @@ var {
 } = React;
 
 const GAME_DATA_URL = 'http://localhost:1337/api/mock';
-const MIN_NUM_SWIPES = 20;
+const MIN_NUM_SWIPES = 2;
 
 var Application = React.createClass({
   getInitialState: function() {
@@ -175,7 +176,7 @@ var Application = React.createClass({
     this.props.navigator.push({
       title: 'Restaurant Matches',
       component: Results,
-      backButtonTitle: 'Review Dishes'
+      backButtonTitle: 'matches'
     });
   },
 
@@ -250,11 +251,6 @@ var styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center'
-  },
-  dragText: {
-    position: 'absolute',
-    bottom: 65,
-    left: 0
   },
   resultsButton: {
     alignItems:'center',
