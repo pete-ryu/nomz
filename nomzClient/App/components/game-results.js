@@ -28,10 +28,18 @@ class GameResults extends Component {
     }
 
     componentDidMount() {
-        var url = "http://localhost:1337/api/venue/near";
+        var url = "http://localhost:1337/api/recommend";
         url += "?lat=" + this.props.lat;
         url += "&long=" + this.props.long;
-        fetch(url)
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(this.props.preferences)
+        })
+        // fetch(url)
             .then((res) => res.json())
             .then((resData) => {
                 this.setState({

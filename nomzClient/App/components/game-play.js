@@ -21,7 +21,7 @@ var {
 } = React;
 
 const GAME_DATA_URL = 'http://localhost:1337/api/mock';
-const MIN_NUM_SWIPES = 20;
+const MIN_NUM_SWIPES = 2;
 
 var Application = React.createClass({
   getInitialState: function() {
@@ -34,7 +34,8 @@ var Application = React.createClass({
       answeredCount: 0,
       preferences: {
         tag: {},
-        venue: {}
+        venue: {},
+        count: 0
       },
       x: 0,
       y: 0,
@@ -136,7 +137,7 @@ var Application = React.createClass({
   },
 
   savePreference: function(like) {
-    // for testing
+    // Yes/No count not used
     if(like) {
       this.setState({ Yes: ++this.state.Yes });
     } else {
@@ -153,6 +154,7 @@ var Application = React.createClass({
     let venue = this.state.imgAry[x].venue;
     this.state.preferences.venue[venue] = this.state.preferences.venue[venue] || { likes: 0, dislikes: 0 };
     this.state.preferences.venue[venue][pref]++;
+    this.state.preferences.count++;
   },
 
   getRotationDegree: function(rotateTop, x) {

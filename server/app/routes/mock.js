@@ -18,12 +18,6 @@ router.get('/', function (req, res) {
   //     tags: [ tagChoices[x], tagChoices[x+2], tagChoices[7] ]
   //   });
   // };
-
-
-
-
-
-
   // var resp = {
   //   images: images
   // };
