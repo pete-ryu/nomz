@@ -38,7 +38,7 @@ var Application = React.createClass({
       },
       x: 0,
       y: 0,
-      geoPosition: 'undefined',
+      geoPosition: undefined,
       // not using Yes and No counts yet, but could be useful in the future
       Yes: 0,
       No: 0
@@ -197,7 +197,8 @@ var Application = React.createClass({
       backButtonTitle: ' ',
       passProps: {
         lat: this.state.geoPosition.coords.latitude,
-        long: this.state.geoPosition.coords.longitude
+        long: this.state.geoPosition.coords.longitude,
+        preferences: this.state.preferences
       }
     });
   },
