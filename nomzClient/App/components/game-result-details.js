@@ -23,7 +23,7 @@ class GameResultDetails extends Component {
     }
 
     componentDidMount() {
-        var url = 'http://localhost:1337/api/venue/' + this.state.rowData.id;
+        let url = 'http://localhost:1337/api/venue/' + this.state.rowData.id;
         fetch(url)
             .then((res) => res.json())
             .then((resData) => {
@@ -41,33 +41,61 @@ class GameResultDetails extends Component {
             return this.renderLoadingView();
         }
 
-        var venueDetails = this.state.venueDetails,
+        let venueDetails = this.state.venueDetails,
             venueImage = venueDetails.categories[0].icon.prefix.replace('ss3.4sqi.net', 'foursquare.com') + 'bg_64' + venueDetails.categories[0].icon.suffix,
             lat = venueDetails.location.lat,
             lng = venueDetails.location.lng,
             gmapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=18&size=400x400&markers=color:red%7Clabel:C%7C${lat},${lng}&key=` + GOOGLE_MAPS_STATIC_API_KEY;
 
+        // foursquare api is inconsistent with some of the fields: address, contact, url, etc.
+        // rather than showing undefined, add them only if they actually exists
+        let venAddress = [],
+            venAddlInfo = [];
+
+        let address2 = venueDetails.location.city;
+        if (venueDetails.location.state)
+            address2 += ', ' + venueDetails.location.state;
+
+        if (venueDetails.location.postalCode)
+            address2 += ', ' + venueDetails.location.postalCode;
+
+        venAddress.push(venueDetails.location.address);
+        venAddress.push(address2);
+
+        if (venueDetails.location.crossStreet)
+            venAddlInfo.push(venueDetails.location.crossStreet);
+
+        if (venueDetails.contact.formattedPhone)
+            venAddlInfo.push(venueDetails.contact.formattedPhone);
+
+        if (venueDetails.url)
+            venAddlInfo.push(venueDetails.url);
+
         return (
             <View style={styles.container}>
-                <View style={styles.venueDetailsHeader}>
-                    <Text style={styles.venueDetailsHeaderText}>
-                    { venueDetails.name }
-                    </Text>
-                    <Image style={styles.venueImage} source={{uri: venueImage }} />
-                </View>
                 <View style={styles.venueDetailsContainer}>
-                    <Image style={styles.venueMap} source={{ uri: gmapUrl }} />
-                    <View style={styles.venueDetails}>
-                        <Text style={styles.venueAddress}>
-                        { venueDetails.location.address + '\n' }
-                        { venueDetails.location.city + ', ' + venueDetails.location.state } { venueDetails.location.postalCode ? this.state.venueDetails.location.postalCode : ''  }
-                        </Text>
-                        <Text >
-                        { venueDetails.location.crossStreet }
-                        { '\n' + venueDetails.contact.formattedPhone }
-                        </Text>
+                    <Image style={styles.venueMap} source={{ uri: gmapUrl }} >
+                        <View style={styles.venueDetailsHeader}>
+                            <Text style={styles.venueDetailsHeaderText}>
+                            { venueDetails.name }
+                            </Text>
+                            <Image style={styles.venueImage} source={{uri: venueImage }} />
+                        </View>
+                    </Image>
+                </View>
+                <View>
+                   <View style={styles.venueDetails}>
+                        <Text style={styles.venueAddress}>{ venAddress.join('\n') }</Text>
+                        <Text>{ venAddlInfo.join('\n') }</Text>
                     </View>
                 </View>
+                {(() => {
+                    if (venueDetails.bestPhoto)
+                        return (<View style={styles.venueDetailsContainer}> 
+                            <Image style={styles.venueMap} source={{uri: venueDetails.bestPhoto.prefix + 'width' + venueDetails.bestPhoto.width + venueDetails.bestPhoto.suffix }} />
+                        </View>)
+                })()}
+               
             </View>
         )
     }
@@ -92,26 +120,27 @@ var styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        justifyContent: 'center',
-        marginHorizontal: 10
+        marginHorizontal: 10,
+        marginTop: 70,
+        alignItems: 'flex-start',
+        flexDirection: 'column'
     },
     venueDetailsContainer: {
-        flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
         borderWidth: 1,
-        marginBottom: 250,
-        borderColor: '#D7D7D7'
+        borderColor: '#D7D7D7',
+        padding: 5
     },
     venueDetailsHeader: {
-        fontSize: 25,
+        fontSize: 30,
         fontWeight: 'bold',
         alignSelf: 'flex-start',
-        marginTop: 70,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        backgroundColor: 'transparent'
     },
     venueDetailsHeaderText: {
-        fontSize: 25,
+        fontSize: 20,
         fontWeight: 'bold'
     },
     venueDetails: {
@@ -123,8 +152,9 @@ var styles = StyleSheet.create({
     venueMap: {
         justifyContent: 'center',
         width: 345,
-        height: 200,
-        marginTop: 5
+        height: 150,
+        flexDirection: 'row',
+        padding: 5
     },
     venueAddress: {
         fontWeight: 'bold',
