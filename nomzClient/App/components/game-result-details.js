@@ -27,7 +27,6 @@ class GameResultDetails extends Component {
         fetch(url)
             .then((res) => res.json())
             .then((resData) => {
-                console.log(resData);
                 this.setState({
                     venueDetails: resData
                 });
@@ -74,8 +73,21 @@ class GameResultDetails extends Component {
         return (
             <View style={styles.container}>
                 <View style={styles.venueDetailsContainer}>
+                <View style={styles.venueDetails}>
+                    <Text style={styles.venueAddress}>{ venAddress.join('\n') }</Text>
+                    <Text>{ venAddlInfo.join('\n') }</Text>
+                </View>
+               
+                {(() => {
+                    if (venueDetails.bestPhoto)
+                        return (
+                            <Image style={styles.venueMainPhoto} source={{uri: venueDetails.bestPhoto.prefix + 'width' + venueDetails.bestPhoto.width + venueDetails.bestPhoto.suffix }} />
+                        )
+                })()}
+                </View>
+                <View style={styles.venueDetailsContainer}>
                     <Image style={styles.venueMap} source={{ uri: gmapUrl }} >
-                        <View style={styles.venueDetailsHeader}>
+                         <View style={styles.venueDetailsHeader}>
                             <Text style={styles.venueDetailsHeaderText}>
                             { venueDetails.name }
                             </Text>
@@ -83,19 +95,6 @@ class GameResultDetails extends Component {
                         </View>
                     </Image>
                 </View>
-                <View>
-                   <View style={styles.venueDetails}>
-                        <Text style={styles.venueAddress}>{ venAddress.join('\n') }</Text>
-                        <Text>{ venAddlInfo.join('\n') }</Text>
-                    </View>
-                </View>
-                {(() => {
-                    if (venueDetails.bestPhoto)
-                        return (<View style={styles.venueDetailsContainer}> 
-                            <Image style={styles.venueMap} source={{uri: venueDetails.bestPhoto.prefix + 'width' + venueDetails.bestPhoto.width + venueDetails.bestPhoto.suffix }} />
-                        </View>)
-                })()}
-               
             </View>
         )
     }
@@ -133,21 +132,25 @@ var styles = StyleSheet.create({
         padding: 5
     },
     venueDetailsHeader: {
-        fontSize: 30,
-        fontWeight: 'bold',
         alignSelf: 'flex-start',
         flexDirection: 'row',
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
+        marginTop: 70
     },
     venueDetailsHeaderText: {
-        fontSize: 20,
-        fontWeight: 'bold'
+        fontSize: 15
     },
     venueDetails: {
         flexDirection: 'column',
         alignSelf: 'flex-start',
-        fontWeight: 'bold',
-        paddingHorizontal: 5
+        backgroundColor: 'transparent'
+    },
+    venueMainPhoto: {
+        justifyContent: 'center',
+        width: 345,
+        height: 150,
+        flexDirection: 'row',
+        padding: 5
     },
     venueMap: {
         justifyContent: 'center',
