@@ -21,7 +21,7 @@ var schema = new mongoose.Schema({
         select: false
     },
     follows: {
-        type: [String],
+        type: [Number],
         ref: 'User'
     },
     posts: [{
@@ -47,7 +47,7 @@ var schema = new mongoose.Schema({
           type: Number
         },
         menuItem: {
-          type: ObjectId,
+          type: String,
           ref: 'MenuItem'
         }
     }]
