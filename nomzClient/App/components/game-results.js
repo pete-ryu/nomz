@@ -59,7 +59,10 @@ class GameResults extends Component {
                       { rowData.name }
                     </Text>
                     <Text>
-                      { rowData.location ? rowData.location.address + '\n' + rowData.location.city + ', ' + rowData.location.state + ' ' + rowData.location.postalCode: '(Not Available)' }
+                    { rowData.location 
+                        ? rowData.location.address + '\n' + rowData.location.city + ', ' + rowData.location.state + ' ' + rowData.location.postalCode
+                        : '(Not Available)' 
+                    }
                     </Text>
                   </View>
                   <View style={styles.venueDetailsRight}>
