@@ -25,7 +25,8 @@ class nomzClient extends Component{
         style={styles.container}
         initialRoute = {{
           title: 'Nomz!',
-          backButtonTitle: 'meal type',
+          // backButtonTitle: 'meal type',
+          backButtonTitle: ' ',
           description: 'Start by selecting the type of meal you are interested in',
           component: Meal
         }} />

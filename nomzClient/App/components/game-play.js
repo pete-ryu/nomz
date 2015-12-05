@@ -21,22 +21,24 @@ var {
 } = React;
 
 const GAME_DATA_URL = 'http://localhost:1337/api/mock';
-const MIN_NUM_SWIPES = 2;
+const MIN_NUM_SWIPES = 20;
 
 var Application = React.createClass({
   getInitialState: function() {
     return {
       loaded: false,
       connectError: false,
-      gameSources: [],
-      currentImage: {},
+      imgAry: [],
+      imgIndex: 0,
+      currentImageUrl: "",
       answeredCount: 0,
       preferences: {
-        likes: {},
-        dislikes: {}
+        tag: {},
+        venue: {}
       },
       x: 0,
       y: 0,
+      geoPosition: undefined,
       // not using Yes and No counts yet, but could be useful in the future
       Yes: 0,
       No: 0
@@ -44,21 +46,31 @@ var Application = React.createClass({
   },
 
   componentDidMount: function() {
-    this.fetchSourceData();
+    navigator.geolocation.getCurrentPosition(
+      (geoPosition) => {
+        this.setState({geoPosition});
+        this.fetchSourceData();
+      },
+      (error) => alert(error.message),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+    );
   },
 
   fetchSourceData: function() {
     var game_url = GAME_DATA_URL;
-    console.log("meal type:",this.props.mealType)
-    if(this.props.mealType) {
-      game_url += "?meal=" + this.props.mealType;
+    if(this.state.geoPosition && this.state.geoPosition.coords) {
+      game_url += "?lat=" + this.state.geoPosition.coords.latitude;
+      game_url += "&long=" + this.state.geoPosition.coords.longitude;
     }
+    // if(this.props.mealType) {
+    //   game_url += "&meal=" + this.props.mealType;
+    // }
     fetch(game_url)
     .then((response) => response.json())
     .then((response) => {
       this.setState({
-        gameSources: this.state.gameSources.concat(response),
-        // gameSources: response,
+        imgAry: this.state.imgAry.concat(response),
+        // imgAry: response,
         loaded: true,
         connectError: false
       });
@@ -74,16 +86,16 @@ var Application = React.createClass({
   },
 
   advanceImage: function() {
-    if(this.state.gameSources.length<5) {
+    var x = this.state.imgIndex;
+    if( (this.state.imgAry.length-x) < 5 ) {
       // fetch now so we don't have to wait when there are no images left
       this.fetchSourceData();
     }
-    let next = this.state.gameSources.splice(0,1);
     this.setState({
-      currentImageUrl: next[0].url,
-      currentImageTags: next[0].tags,
-      // answeredCount: ++this.state.answeredCount
-    })
+      imgIndex: ++x,
+      currentImageUrl: this.state.imgAry[x]["url"] + "?rand="+ new Date().getTime()
+      // add date so that image doesn't get cached
+    });
   },
 
   setPosition: function(e) {
@@ -131,11 +143,16 @@ var Application = React.createClass({
       this.setState({ No: ++this.state.No });
     }
 
+    let x = this.state.imgIndex;
     let pref = like ? 'likes' : 'dislikes';
-    this.state.currentImageTags.forEach((tag) => {
-      this.state.preferences[pref][tag] = this.state.preferences[pref][tag] || 0;
-      this.state.preferences[pref][tag]++;
+    // this.state.currentImageTags.forEach((tag) => {
+    this.state.imgAry[x]["tags"].forEach((tag) => {
+      this.state.preferences.tag[tag] = this.state.preferences.tag[tag] || { likes: 0, dislikes: 0 };
+      this.state.preferences.tag[tag][pref]++;
     });
+    let venue = this.state.imgAry[x].venue;
+    this.state.preferences.venue[venue] = this.state.preferences.venue[venue] || { likes: 0, dislikes: 0 };
+    this.state.preferences.venue[venue][pref]++;
   },
 
   getRotationDegree: function(rotateTop, x) {
@@ -176,7 +193,13 @@ var Application = React.createClass({
     this.props.navigator.push({
       title: 'Restaurant Matches',
       component: Results,
-      backButtonTitle: 'matches'
+      // backButtonTitle: 'back',
+      backButtonTitle: ' ',
+      passProps: {
+        lat: this.state.geoPosition.coords.latitude,
+        long: this.state.geoPosition.coords.longitude,
+        preferences: this.state.preferences
+      }
     });
   },
 
@@ -223,13 +246,6 @@ var Application = React.createClass({
               source={{ uri: this.state.currentImageUrl }}
               style={styles.cardImage}
             />
-          </View>
-          <View>
-            <Text>{this.state.currentImageUrl}</Text>
-            <Text>{this.state.currentImageTags}</Text>
-            <Text>{this.state.answeredCount}</Text>
-            <Text>{this.state.Yes}</Text>
-            <Text>{this.state.No}</Text>
           </View>
           <View style={styles.resultsButton}>
             <Button

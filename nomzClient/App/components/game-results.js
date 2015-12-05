@@ -28,7 +28,10 @@ class GameResults extends Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:1337/api/venue/near?lat=40.7048872&long=-74.0123737')
+        var url = "http://localhost:1337/api/venue/near";
+        url += "?lat=" + this.props.lat;
+        url += "&long=" + this.props.long;
+        fetch(url)
             .then((res) => res.json())
             .then((resData) => {
                 this.setState({
@@ -88,6 +91,7 @@ class GameResults extends Component {
     onPress(rowData) {
         this.props.navigator.push({
             component: GameResultDetails,
+            backButtonTitle: rowData.name,
             passProps: {
                 rowData: rowData
             }
