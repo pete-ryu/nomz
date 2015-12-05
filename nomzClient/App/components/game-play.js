@@ -243,7 +243,7 @@ var Application = React.createClass({
             style={[styles.card, this.getCardStyle()]}
           >
             <Image
-              source={{ uri: this.state.currentImageUrl + "?rand="+ new Date().getTime() }}
+              source={{ uri: this.state.currentImageUrl }}
               style={styles.cardImage}
             />
           </View>
