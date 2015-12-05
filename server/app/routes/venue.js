@@ -36,8 +36,9 @@ router.get('/near', ensureAuthenticated, function (req, res) {
 router.get('/:id', ensureAuthenticated, function(req, res) {
   fsHelper.venue({ venue_id: req.params.id })
   .then(function(venue) {
+    // res.json(venue.response.venue);
     res.json(_.pick(venue.response.venue,
-      'id', 'name', 'contact', 'location', 'categories', 'url', 'ratings', 'hours', 'attributes'));
+      'id', 'name', 'contact', 'location', 'categories', 'url', 'ratings', 'hours', 'attributes', 'bestPhoto'));
   })
   .catch(function(err) { res.sendStatus(404); })
 })
