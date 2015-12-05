@@ -41,7 +41,6 @@ router.get('/nomzStorage', ensureAuthenticated, function(req, res) {
     respArr = _.shuffle(respArr)
     res.json(respArr);
   })
-  .catch(err => { console.log(err); res.sendStatus(404); });
 })
 
 router.get('/start', ensureAuthenticated, function (req, res) {
