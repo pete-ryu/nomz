@@ -18,7 +18,8 @@ var Meal = React.createClass({
     this.props.navigator.push({
       title: 'Review Dishes',
       component: Play,
-      backButtonTitle: 'swipe',
+      // backButtonTitle: 'swipe',
+      backButtonTitle: ' ',
       passProps: { mealType: mealType }
     });
   },

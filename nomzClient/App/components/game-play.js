@@ -37,6 +37,7 @@ var Application = React.createClass({
       },
       x: 0,
       y: 0,
+      geoPosition: 'undefined',
       // not using Yes and No counts yet, but could be useful in the future
       Yes: 0,
       No: 0
@@ -44,15 +45,25 @@ var Application = React.createClass({
   },
 
   componentDidMount: function() {
-    this.fetchSourceData();
+    navigator.geolocation.getCurrentPosition(
+      (geoPosition) => {
+        this.setState({geoPosition});
+        this.fetchSourceData();
+      },
+      (error) => alert(error.message),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+    );
   },
 
   fetchSourceData: function() {
     var game_url = GAME_DATA_URL;
-    console.log("meal type:",this.props.mealType)
-    if(this.props.mealType) {
-      game_url += "?meal=" + this.props.mealType;
+    if(this.state.geoPosition && this.state.geoPosition.coords) {
+      game_url += "?lat=" + this.state.geoPosition.coords.latitude;
+      game_url += "&long=" + this.state.geoPosition.coords.longitude;
     }
+    // if(this.props.mealType) {
+    //   game_url += "&meal=" + this.props.mealType;
+    // }
     fetch(game_url)
     .then((response) => response.json())
     .then((response) => {
@@ -176,7 +187,12 @@ var Application = React.createClass({
     this.props.navigator.push({
       title: 'Restaurant Matches',
       component: Results,
-      backButtonTitle: 'matches'
+      // backButtonTitle: 'back',
+      backButtonTitle: ' ',
+      passProps: {
+        lat: this.state.geoPosition.coords.latitude,
+        long: this.state.geoPosition.coords.longitude
+      }
     });
   },
 
@@ -220,16 +236,9 @@ var Application = React.createClass({
             style={[styles.card, this.getCardStyle()]}
           >
             <Image
-              source={{ uri: this.state.currentImageUrl }}
+              source={{ uri: this.state.currentImageUrl + "?rand="+ new Date().getTime() }}
               style={styles.cardImage}
             />
-          </View>
-          <View>
-            <Text>{this.state.currentImageUrl}</Text>
-            <Text>{this.state.currentImageTags}</Text>
-            <Text>{this.state.answeredCount}</Text>
-            <Text>{this.state.Yes}</Text>
-            <Text>{this.state.No}</Text>
           </View>
           <View style={styles.resultsButton}>
             <Button
