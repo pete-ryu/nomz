@@ -4,6 +4,10 @@ var mongoose = require('mongoose');
 var ObjectId = mongoose.Schema.Types.ObjectId;
 
 var schema = new mongoose.Schema({
+  _id: {
+    type: String,
+    unique: true
+  },
   name: {
     type: String
   },
@@ -12,6 +16,9 @@ var schema = new mongoose.Schema({
   }, 
   zipCode: {
     type: String
+  },
+  url: {
+    String
   },
   phone: {
     type: String
@@ -27,6 +34,15 @@ var schema = new mongoose.Schema({
     type: String
   },
   cuisine: {
+    type: String
+  },
+  reservationUrl: {
+    type: String
+  },
+  deliveryUrl: {
+    type: String
+  },
+  menuUrl: {
     type: String
   },
   menuItems: [{
