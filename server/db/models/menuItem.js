@@ -16,6 +16,9 @@ var schema = new mongoose.Schema({
   imageUrl: {
     type: String
   },
+  images: {
+    type: [String]
+  },
   venue: {
     type: String,
     ref: 'Venue'
@@ -35,7 +38,7 @@ var schema = new mongoose.Schema({
   images: {
     type: [String]
   }
-  
+
 })
 
 mongoose.model('MenuItem', schema);

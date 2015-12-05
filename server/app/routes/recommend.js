@@ -23,28 +23,19 @@ router.post('/', ensureAuthenticated, function (req, res) {
    .then(venues => venues.response.venues.map(v =>
      _.pick(v, 'id', 'name', 'location', 'categories', 'attributes', 'stats')
    ))
-  //  .then(arr => { console.log(arr); return arr })
-  // .then(arr => {
-  //  console.log(prefs);
-  //  return arr;
-  // })
   .then(venues => makeRecommendation(prefs, venues))
   .then(arr => res.json(arr))
   .catch(function(err) { res.sendStatus(404); })
 });
 
 var makeRecommendation = function(prefs, venueList) {
-  // loop through prefs venues,
-  //  - add like/dislike ct to actual venue
-  // loop through prefs tags
-
-
   venueList.forEach(venue => venue.nomzRank = 0);
   venueList.forEach(venue => {
     let rank = 0;
-
-    // check if liked/disliked
     let venuePrefs = 0;
+    let catRank = 0;
+
+    // check if liked/disliked venue
     if(prefs.venue[venue]) {
       let likes = prefs.venue[venue].likes;
       let dislikes = prefs.venue[venue].dislikes;
@@ -52,12 +43,11 @@ var makeRecommendation = function(prefs, venueList) {
     }
     rank += venuePrefs;
 
-
-
-
+    // check if liked/disliked tags...
+    // TODO: this!
     venue.nomzRank = rank;
   })
-  return venueList;
+  return _.sortBy(venueList, 'nomzRank');
 }
 
 

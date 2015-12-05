@@ -20,8 +20,9 @@ var {
   View
 } = React;
 
-const GAME_DATA_URL = 'http://localhost:1337/api/mock';
-const MIN_NUM_SWIPES = 2;
+// const GAME_DATA_URL = 'http://localhost:1337/api/mock';
+const GAME_DATA_URL = 'http://localhost:1337/api/game/nomzStorage';
+const MIN_NUM_SWIPES = 20;
 
 var Application = React.createClass({
   getInitialState: function() {
@@ -111,28 +112,29 @@ var Application = React.createClass({
   resetPosition: function(e) {
     this.dragging = false;
 
+    // Step 1: reset image location
+    this.setState({
+      x: 0,
+      y: 0,
+    });
+
+    // Step 2: should we count this swipe?
     var xPos = e.nativeEvent.pageX;
     var windowWidth = windowSize.width;
     var tolerance = 0.15;
     var xDelta = Math.abs(this.dragStart.x - xPos);
-    if( (tolerance*windowWidth) > xDelta ) {
-      // didn't move image far enough
-      // doesnt count as a swipe, just reset the image to center
-      return this.setState({
-        x: 0,
-        y: 0,
-      });
+    // must move {tolerance} % of screen to count as a swipe
+    if( (tolerance*windowWidth) < xDelta ) {
+      var liked = xPos > (windowWidth/2)
+      this.makeSwipe(liked)
     }
-    // swiped far enough to count
-    var liked = xPos > (windowWidth/2)
+  },
+
+  makeSwipe: function(like) {
+    this.savePreference(like);
     this.setState({
-      answeredCount: ++this.state.answeredCount,
-      x: 0,
-      y: 0
-    })
-    // update preferences
-    this.savePreference(liked);
-    // now load next image
+      answeredCount: ++this.state.answeredCount
+    });
     this.advanceImage();
   },
 
@@ -249,6 +251,14 @@ var Application = React.createClass({
               style={styles.cardImage}
             />
           </View>
+          <View style={{flexDirection:'row'}}>
+            <TouchableOpacity style={styles.buttonYN} onPress={() => this.makeSwipe(false)}>
+              <Image source={require('../images/food_no_icon.png')}/>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.buttonYN} onPress={() => this.makeSwipe(true)}>
+              <Image source={require('../images/food_yes_icon.png')}/>
+            </TouchableOpacity>
+          </View>
           <View style={styles.resultsButton}>
             <Button
               style={styles.matchesBtn}
@@ -294,6 +304,10 @@ var styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
     top: 0
+  },
+
+  buttonYN: {
+    padding: 25
   },
 
   matchesBtn: {
