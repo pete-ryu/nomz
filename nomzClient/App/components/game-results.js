@@ -11,7 +11,9 @@ var {
     Image,
     ListView,
     TouchableHighlight,
-    NavigatorIOS
+    NavigatorIOS,
+    ActivityIndicatorIOS,
+    Dimensions
 } = React;
 
 class GameResults extends Component {
@@ -23,14 +25,17 @@ class GameResults extends Component {
         });
 
         this.state = {
-            dataSource: ds
+            dataSource: ds,
+            lat: props.lat,
+            long: props.long,
+            loading: true,
+            loaderYAxis: Dimensions.get('window').height
         }
     }
 
     componentDidMount() {
-        var url = "http://localhost:1337/api/venue/near";
-        url += "?lat=" + this.props.lat;
-        url += "&long=" + this.props.long;
+        let url = `http://localhost:1337/api/venue/near?lat=${this.state.lat}&long=${this.state.long}`;
+
         fetch(url)
             .then((res) => res.json())
             .then((resData) => {
@@ -48,7 +53,7 @@ class GameResults extends Component {
             venueDistance = rowData.location ? parseFloat((parseInt(rowData.location.distance) * 0.000621371)).toFixed(2) : '(?)';
 
         return (
-            <TouchableHighlight onPress={() => this.onPress(rowData)} underlayColor='#ddd'>
+            <TouchableHighlight onPress={() => this._onPress(rowData)} underlayColor='#ddd'>
               <View style={styles.rowContent}>
                 <View >
                   <Image style={styles.venueImage} source={{uri: venueImage }} />
@@ -70,10 +75,10 @@ class GameResults extends Component {
                       { venueDistance + ' mi' }
                     </Text>
                     <View style={styles.checkin}>
-                    <Text>
-                      { rowData.stats.checkinsCount }
-                    </Text>
-                    <Image style={styles.checkinImage} source={{ uri: 'https://cdn4.iconfinder.com/data/icons/eldorado-mobile/40/location_current-20.png' }} />
+                        <Text>
+                          { rowData.stats.checkinsCount }
+                        </Text>
+                        <Image style={styles.checkinImage} source={{ uri: 'https://cdn4.iconfinder.com/data/icons/eldorado-mobile/40/location_current-20.png' }} />
                     </View>
                   </View>
                 </View>
@@ -85,20 +90,29 @@ class GameResults extends Component {
     render() {
         return (
             <View style={styles.container}>
-              <ListView dataSource={this.state.dataSource}
-                renderRow={this.renderRow.bind(this)} />
+                <ActivityIndicatorIOS
+                    animating={this.state.loading}
+                    style={[styles.centering, { height: this.state.loaderYAxis }]}
+                    size='large' />
+                <ListView dataSource={this.state.dataSource}
+                    renderRow={this.renderRow.bind(this)} onEndReached={ this._endLoading.bind(this) }/>
             </View>
         );
     }
 
-    onPress(rowData) {
+    _onPress(rowData) {
         this.props.navigator.push({
             component: GameResultDetails,
-            backButtonTitle: rowData.name,
+            title: rowData.name,
             passProps: {
                 rowData: rowData
             }
         });
+    }
+
+    _endLoading() {
+        this.state.animating = false;
+        this.state.loaderYAxis = 0;
     }
 }
 
@@ -110,9 +124,8 @@ var styles = StyleSheet.create({
     rowContent: {
         flex: 1,
         flexDirection: 'row',
-        paddingTop: 10,
+        paddingVertical: 10,
         paddingLeft: 10,
-        paddingBottom: 10,
         borderColor: '#D7D7D7',
         borderBottomWidth: 1
     },
@@ -131,7 +144,7 @@ var styles = StyleSheet.create({
     venueDetailsRight: {
         marginRight: 10,
         flex: 1,
-        alignItems: 'flex-end'
+        alignItems: 'flex-end',
     },
     checkinImage: {
         width: 20,
