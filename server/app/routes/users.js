@@ -23,32 +23,45 @@ router.param('id', function (req, res, next, id) {
 */
 
 
-// Get user profile w/ followers
-// Use this to get their posts as well
-router.get('/:id', function(req, res) {
-  res.json(req.requestedUser);
+// Get the user's own profile
+router.get('/me', function(req, res) {
+  if (req.user) {
+    res.json(req.user)
+  }
+  res.send('hi')
 })
 
-// Get user followers
-router.get('/:id/followers', function(req, res) {
-  User.find({ follows: req.requestedUser._id })
-    .then(function(users) {
-      res.json(users)
+// Get another user's profile
+router.get('/:id', function(req, res, next) {
+  res.json(req.requestedUser)
+})
+
+// Get a user's following
+router.get('/:id/following', function(req, res, next) {
+  req.requestedUser.getFollowing()
+    .then( following => {
+      res.json(following);
     })
+})
+
+
+
+// Get people the follow the user
+router.get('/:id/followers', function(req, res, next) {
+  req.requestedUser.getFollowers()
+    .then( followers => {
+      res.json(followers)
+    })
+    .then(null, next)
 })
 
 // get user feed
-router.get('/:id/feed', function(req, res) {
-  User.findById(req.params.id)
-    .populate('follows')
-    .then(function(user) {
-      var friendPosts = _.pluck(user.follows, 'posts')
-      friendPosts = _.chain(friendPosts)
-                      .flatten()
-                      .sortBy('date')
-                      .reverse();
-      res.json(friendPosts);
+router.get('/:id/feed', function(req, res, next) {
+  req.requestedUser.getFeed()
+    .then( feed => { 
+      res.json(feed)
     })
+    .then(null, next)
 })
 
 /*
@@ -57,43 +70,38 @@ router.get('/:id/feed', function(req, res) {
 */
 
 // Add a follower
-router.put('/:id/follow/:followedUser', function(req, res) {
-  var followIdx = req.requestedUser.follows.indexOf(req.params.followedUser)
-  if (followIdx > -1) {
-    return res.sendStatus(409)
-  }
-  req.requestedUser.follows.push(req.params.followedUser);
-  return req.requestedUser.save()
-    .then(function(user) {
-      res.json(user);
-    })
+router.put('/:id/follow/:followedUser', function(req, res, next) {
+  req.requestedUser.follow(req.params.followedUser)
+    .then( user => {
+      res.json(user)
+    }).then(null, err => {
+      if (err.statusCode && err.statusCode === 409) {
+        res.sendStatus(err.statusCode)
+      }
+    }).then(null, next)
+
 })
 
 // Remove a follower
-router.put('/:id/unfollow/:followedUser', function(req, res) {
-  var followerIdx = req.requestedUser.follows.indexOf(req.params.followedUser)
-  console.log(req.requestedUser.follows)
-  console.log('follwed user:', req.params.followedUser);
-  console.log(followerIdx)
-  if (followerIdx === -1) {
-    return res.json(404)
-  } else {
-    req.requestedUser.follows.splice(followerIdx, 1)
-    return req.requestedUser.save()
-      .then(function(user) {
-        res.sendStatus(204)
-      })
-  }
+router.put('/:id/unfollow/:followedUser', function(req, res, next) {
+  req.requestedUser.unfollow(req.params.followedUser)
+    .then( user => {
+      res.json(user)
+    }).then(null, err => {
+      if (err.statusCode && err.statusCode === 404) {
+        res.sendStatus(err.statusCode)
+      }
+    }).then(null, next)
 })
 
 // Edit user
-router.put('/:id', function(req, res) {
+router.put('/:id', function(req, res, next) {
   delete req.body.password
   _.extend(req.requestedUser, req.body);
   return req.requestedUser.save() 
     .then(function(user) {
       res.status(204).json(user)
-    })
+    }).then(null, next)
 })
 
 

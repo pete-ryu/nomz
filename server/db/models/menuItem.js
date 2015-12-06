@@ -13,12 +13,6 @@ var schema = new mongoose.Schema({
   category: {
     type: String
   },
-  imageUrl: {
-    type: String
-  },
-  images: {
-    type: [String]
-  },
   venue: {
     type: String,
     ref: 'Venue'
