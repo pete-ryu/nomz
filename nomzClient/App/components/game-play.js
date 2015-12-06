@@ -239,17 +239,7 @@ var Application = React.createClass({
   renderCard: function() {
     return (
       <View style={styles.container}>
-          <View
-            onResponderMove={this.setPosition}
-            onResponderRelease={this.resetPosition}
-            onStartShouldSetResponder={this._onStartShouldSetResponder}
-            onMoveShouldSetResponder={this._onMoveShouldSetResponder}
-            style={[styles.card, this.getCardStyle()]}
-          >
-            <Image
-              source={{ uri: this.state.currentImageUrl }}
-              style={styles.cardImage}
-            />
+          <View style={styles.cardFiller} >
           </View>
           <View style={{flexDirection:'row'}}>
             <TouchableOpacity style={styles.buttonYN} onPress={() => this.makeSwipe(false)}>
@@ -269,6 +259,18 @@ var Application = React.createClass({
               {this.matchBtnText()}
             </Button>
           </View>
+          <View
+            onResponderMove={this.setPosition}
+            onResponderRelease={this.resetPosition}
+            onStartShouldSetResponder={this._onStartShouldSetResponder}
+            onMoveShouldSetResponder={this._onMoveShouldSetResponder}
+            style={[styles.card, this.getCardStyle()]}
+          >
+            <Image
+              source={{ uri: this.state.currentImageUrl }}
+              style={styles.cardImage}
+            />
+          </View>
       </View>
     );
   }
@@ -284,7 +286,13 @@ var styles = StyleSheet.create({
     alignItems:'center',
     top: 65
   },
+  cardFiller: {
+    height: 300
+  },
   card: {
+    position: 'absolute',
+    top: 100,
+    left: windowSize.width/2 - 150,
     borderWidth: 3,
     borderRadius: 3,
     borderColor: '#000',
@@ -295,21 +303,10 @@ var styles = StyleSheet.create({
   cardImage: {
     height: 274,
   },
-  textLeft: {
-    position: 'absolute',
-    left:0,
-    top:0
-  },
-  textRight: {
-    position: 'absolute',
-    right: 0,
-    top: 0
-  },
 
   buttonYN: {
     padding: 25
   },
-
   matchesBtn: {
     fontSize: 20,
     color: 'black',

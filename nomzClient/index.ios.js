@@ -5,8 +5,7 @@
 'use strict';
 
 var React = require('react-native');
-// var Game = require('./App/components/game-home');
-var Meal = require('./App/components/Meal');
+var Game = require('./App/components/game-play');
 
 var {
   AppRegistry,
@@ -28,7 +27,7 @@ class nomzClient extends Component{
           // backButtonTitle: 'meal type',
           backButtonTitle: ' ',
           description: 'Start by selecting the type of meal you are interested in',
-          component: Meal
+          component: Game
         }} />
     )
   }
