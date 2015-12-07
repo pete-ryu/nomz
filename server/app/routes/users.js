@@ -26,14 +26,15 @@ router.param('id', function (req, res, next, id) {
 // Get the user's own profile
 router.get('/me', function(req, res) {
   if (req.user) {
-    res.json(req.user)
+    res.json(req.user);
+  } else {
+    res.sendStatus(403);
   }
-  res.send('hi')
 })
 
 // Get another user's profile
 router.get('/:id', function(req, res, next) {
-  res.json(req.requestedUser)
+  res.json(req.requestedUser);
 })
 
 // Get a user's following
@@ -50,18 +51,18 @@ router.get('/:id/following', function(req, res, next) {
 router.get('/:id/followers', function(req, res, next) {
   req.requestedUser.getFollowers()
     .then( followers => {
-      res.json(followers)
+      res.json(followers);
     })
-    .then(null, next)
+    .then(null, next);
 })
 
 // get user feed
 router.get('/:id/feed', function(req, res, next) {
   req.requestedUser.getFeed()
     .then( feed => { 
-      res.json(feed)
+      res.json(feed);
     })
-    .then(null, next)
+    .then(null, next);
 })
 
 /*

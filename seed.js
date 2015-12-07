@@ -30,6 +30,7 @@ var seedUsers = function () {
             _id: '1',
             email: 'ian@ian.com',
             password: 'ian',
+            username: 'ian',
             following: [2, 3],
             posts: [
 
@@ -56,6 +57,7 @@ var seedUsers = function () {
             _id: '2',
             email: 'andy@andy.com',
             password: 'andy',
+            username: 'andy',
             following: [],
             posts: [
                 {
@@ -79,6 +81,7 @@ var seedUsers = function () {
             _id: '3',
             email: 'peter@peter.com',
             password: 'peter',
+            username: 'peter',
             following: [],
             posts: [
                 {

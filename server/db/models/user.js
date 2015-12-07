@@ -9,10 +9,16 @@ var Promise = require('bluebird');
 var schema = new mongoose.Schema({
     _id: { // Foursquare Token
         type: String,
+        unique: true,
+        default: shortId.generate
+    },
+    username: {
+        type: String,
         unique: true
     },
     email: {
-        type: String
+        type: String,
+        unique: true
     },
     password: {
         type: String,
@@ -65,7 +71,6 @@ var encryptPassword = function (plainText, salt) {
 };
 
 schema.pre('save', function (next) {
-
     if (this.isModified('password')) {
         this.salt = this.constructor.generateSalt();
         this.password = this.constructor.encryptPassword(this.password, this.salt);
@@ -78,15 +83,14 @@ schema.pre('save', function (next) {
 schema.statics.generateSalt = generateSalt;
 schema.statics.encryptPassword = encryptPassword;
 
-schema.method('correctPassword', function (candidatePassword) {
-    return encryptPassword(candidatePassword, this.salt) === this.password;
-});
 
+schema.methods.correctPassword = function(candidatePassword) {
+    return encryptPassword(candidatePassword, this.salt) === this.password;
+}
 
 schema.methods.getFeed = function() {
     return this.model('User').populate(this, { path: 'following'})
         .then( user => {
-            console.log(user)
             var friendsPosts = _.pluck(user.following, 'posts')
             return _.chain(friendsPosts)
                             .flatten()
