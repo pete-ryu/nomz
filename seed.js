@@ -30,7 +30,8 @@ var seedUsers = function () {
             _id: '1',
             email: 'ian@ian.com',
             password: 'ian',
-            follows: [],
+            username: 'ian',
+            following: [2, 3],
             posts: [
 
                 {
@@ -56,7 +57,8 @@ var seedUsers = function () {
             _id: '2',
             email: 'andy@andy.com',
             password: 'andy',
-            follows: [],
+            username: 'andy',
+            following: [],
             posts: [
                 {
                     imageUrl:  'http://si.wsj.net/public/resources/images/NY-BY632_LUNCHB_P_20121016170840.jpg',
@@ -79,7 +81,8 @@ var seedUsers = function () {
             _id: '3',
             email: 'peter@peter.com',
             password: 'peter',
-            follows: [],
+            username: 'peter',
+            following: [],
             posts: [
                 {
                     imageUrl:  'http://s3-media4.fl.yelpcdn.com/bphoto/ptpOBDdI95DxnbAcgig2WA/348s.jpg',

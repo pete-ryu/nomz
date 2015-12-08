@@ -3,14 +3,22 @@ var crypto = require('crypto');
 var mongoose = require('mongoose');
 var ObjectId = mongoose.Schema.Types.ObjectId;
 var shortId = require('shortid');
+var _ = require('lodash');
+var Promise = require('bluebird');
 
 var schema = new mongoose.Schema({
     _id: { // Foursquare Token
         type: String,
+        unique: true,
+        default: shortId.generate
+    },
+    username: {
+        type: String,
         unique: true
     },
     email: {
-        type: String
+        type: String,
+        unique: true
     },
     password: {
         type: String,
@@ -20,7 +28,7 @@ var schema = new mongoose.Schema({
         type: String,
         select: false
     },
-    follows: {
+    following: {
         type: [Number],
         ref: 'User'
     },
@@ -32,10 +40,6 @@ var schema = new mongoose.Schema({
         imageUrl: {
           type: String
         },
-        // author: { // Only if we're making this a separate collection...
-        //   type: ObjectId,
-        //   ref: 'User'
-        // },
         date: {
           type: Date,
           default: Date.now
@@ -67,7 +71,6 @@ var encryptPassword = function (plainText, salt) {
 };
 
 schema.pre('save', function (next) {
-
     if (this.isModified('password')) {
         this.salt = this.constructor.generateSalt();
         this.password = this.constructor.encryptPassword(this.password, this.salt);
@@ -80,13 +83,57 @@ schema.pre('save', function (next) {
 schema.statics.generateSalt = generateSalt;
 schema.statics.encryptPassword = encryptPassword;
 
-schema.method('correctPassword', function (candidatePassword) {
-    return encryptPassword(candidatePassword, this.salt) === this.password;
-});
 
-schema.methods.getFollows = function(id) {
-    return this.model.find({ follows: id })
+schema.methods.correctPassword = function(candidatePassword) {
+    return encryptPassword(candidatePassword, this.salt) === this.password;
+}
+
+schema.methods.getFeed = function() {
+    return this.model('User').populate(this, { path: 'following'})
+        .then( user => {
+            var friendsPosts = _.pluck(user.following, 'posts')
+            return _.chain(friendsPosts)
+                            .flatten()
+                            .sortBy('date')
+                            .reverse()
+            
+        })
+}
+
+schema.methods.getFollowers = function() {
+    return this.model('User').find({ following: this._id})
+        .then( followers => {
+            return followers
+        })
+}
+
+schema.methods.follow = function(userId) { 
+    var followerIdx = this.following.indexOf(userId);
+    if (followerIdx > -1) {
+        var error = new Error('Aleady following that user')
+        error.statusCode = 409
+        return Promise.reject(error)
+    }
+    this.following.push(userId);
+    return this.save()
+}
+
+schema.methods.unfollow = function(userId) {
+    var followerIdx = this.following.indexOf(userId);
+    if (followerIdx === -1) {
+        var error = new Error('Not following this user')
+        error.statusCode = 404
+        return Promise.reject(error)
+    }
+    this.following.splice(followerIdx, 1)
+    return this.save()
 }
 
 
+schema.methods.getFollowing = function() {
+    return this.model('User').populate(this, { path: 'following'} )
+        .then( user => {
+            return user.following
+        })
+}
 mongoose.model('User', schema);

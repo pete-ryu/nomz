@@ -5,12 +5,10 @@ var _ = require('lodash');
 var passport = require('passport');
 var path = require('path');
 var mongoose = require('mongoose');
-var UserModel = mongoose.model('User');
+var User = mongoose.model('User');
 
 var ENABLED_AUTH_STRATEGIES = [
     'local'
-    // 'foursquare'
-    // 'facebook'
 ];
 
 module.exports = function (app) {
@@ -38,7 +36,7 @@ module.exports = function (app) {
     // When we receive a cookie from the browser, we use that id to set our req.user
     // to a user found in the database.
     passport.deserializeUser(function (id, done) {
-        UserModel.findById(id, done);
+        User.findById(id, done);
     });
 
     // We provide a simple GET /session in order to get session information directly.
@@ -57,6 +55,7 @@ module.exports = function (app) {
         req.logout();
         res.status(200).end();
     });
+
 
     // Each strategy enabled gets registered.
     ENABLED_AUTH_STRATEGIES.forEach(function (strategyName) {
