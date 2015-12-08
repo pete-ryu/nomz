@@ -11,7 +11,6 @@ var color = require('./colors');
 var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
 var {
-  // Animation,
   Image,
   NavigatorIOS,
   StyleSheet,
@@ -20,8 +19,8 @@ var {
   View
 } = React;
 
-// const GAME_DATA_URL = 'http://localhost:1337/api/mock';
 const GAME_DATA_URL = 'http://localhost:1337/api/game/nomzStorage';
+// const GAME_DATA_URL = 'http://localhost:1337/api/game/start';
 const MIN_NUM_SWIPES = 20;
 
 var Application = React.createClass({
@@ -64,9 +63,6 @@ var Application = React.createClass({
       game_url += "?lat=" + this.state.geoPosition.coords.latitude;
       game_url += "&long=" + this.state.geoPosition.coords.longitude;
     }
-    // if(this.props.mealType) {
-    //   game_url += "&meal=" + this.props.mealType;
-    // }
     fetch(game_url)
     .then((response) => response.json())
     .then((response) => {
@@ -95,7 +91,7 @@ var Application = React.createClass({
     }
     this.setState({
       imgIndex: ++x,
-      currentImageUrl: this.state.imgAry[x]["url"] + "?rand="+ new Date().getTime()
+      currentImageUrl: this.state.imgAry[x]["url"] //+ "?rand="+ new Date().getTime()
       // add date so that image doesn't get cached
     });
   },
@@ -239,17 +235,7 @@ var Application = React.createClass({
   renderCard: function() {
     return (
       <View style={styles.container}>
-          <View
-            onResponderMove={this.setPosition}
-            onResponderRelease={this.resetPosition}
-            onStartShouldSetResponder={this._onStartShouldSetResponder}
-            onMoveShouldSetResponder={this._onMoveShouldSetResponder}
-            style={[styles.card, this.getCardStyle()]}
-          >
-            <Image
-              source={{ uri: this.state.currentImageUrl }}
-              style={styles.cardImage}
-            />
+          <View style={styles.cardFiller} >
           </View>
           <View style={{flexDirection:'row'}}>
             <TouchableOpacity style={styles.buttonYN} onPress={() => this.makeSwipe(false)}>
@@ -269,6 +255,18 @@ var Application = React.createClass({
               {this.matchBtnText()}
             </Button>
           </View>
+          <View
+            onResponderMove={this.setPosition}
+            onResponderRelease={this.resetPosition}
+            onStartShouldSetResponder={this._onStartShouldSetResponder}
+            onMoveShouldSetResponder={this._onMoveShouldSetResponder}
+            style={[styles.card, this.getCardStyle()]}
+          >
+            <Image
+              source={{ uri: this.state.currentImageUrl }}
+              style={styles.cardImage}
+            />
+          </View>
       </View>
     );
   }
@@ -284,32 +282,27 @@ var styles = StyleSheet.create({
     alignItems:'center',
     top: 65
   },
+  cardFiller: {
+    height: 300
+  },
   card: {
+    position: 'absolute',
+    top: 100,
+    left: windowSize.width/2 - 150,
+    width: 300,
+    height: 300,
+    padding: 10,
     borderWidth: 3,
     borderRadius: 3,
     borderColor: '#000',
-    width: 300,
-    height: 300,
-    padding: 10
   },
   cardImage: {
     height: 274,
-  },
-  textLeft: {
-    position: 'absolute',
-    left:0,
-    top:0
-  },
-  textRight: {
-    position: 'absolute',
-    right: 0,
-    top: 0
   },
 
   buttonYN: {
     padding: 25
   },
-
   matchesBtn: {
     fontSize: 20,
     color: 'black',

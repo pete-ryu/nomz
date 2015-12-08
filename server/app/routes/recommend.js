@@ -29,40 +29,33 @@ router.post('/', ensureAuthenticated, function (req, res) {
 });
 
 var makeRecommendation = function(prefs, venueList) {
-  venueList.forEach(venue => venue.nomzRank = 0);
+  // venueList.forEach(venue => venue.nomzRank = 0);
   venueList.forEach(venue => {
-    let rank = 0;
-    let venuePrefs = 0;
+    let venueRank = 0;
+    let venueWeight = 70;
     let catRank = 0;
+    let catCount = 0;
+    let catWeight = 30;
 
     // check if liked/disliked venue
-    if(prefs.venue[venue]) {
-      let likes = prefs.venue[venue].likes;
-      let dislikes = prefs.venue[venue].dislikes;
-      venuePrefs = (likes - disilkes)/prefs.count;
+    if(prefs.venue[venue.id]) {
+      let likes = prefs.venue[venue.id].likes;
+      let dislikes = prefs.venue[venue.id].dislikes;
+      venueRank = venueWeight*(likes - dislikes)/prefs.count;
     }
-    rank += venuePrefs;
 
     // check if liked/disliked tags...
-    // TODO: this!
-    venue.nomzRank = rank;
-  })
-  return _.sortBy(venueList, 'nomzRank');
+    venue.categories.forEach(c => {
+      let name = c.shortName;
+      if(prefs.tag[name]) {
+        catRank += (prefs.tag[name].likes - prefs.tag[name].dislikes)/prefs.count;
+        catCount++;
+      }
+    });
+    if(catCount) { catRank = catWeight*catRank/catCount; }
+
+    venue.nomzRank = venueRank + catRank;
+  });
+
+  return _.sortBy(venueList, 'nomzRank').reverse();
 }
-
-
-
-// router.post('/', ensureAuthenticated, function(req, res) {
-//   var choices = req.body,
-//     ll = req.query.lat+","+req.query.long;
-//
-//
-//   var rs = new RecommendationService();
-//   rs.recommend(lat, long, choices)
-//     .then(function(venues) {
-//       res.json(venues);
-//     })
-//     .catch(function(err) {
-//       res.status(500).send("error while getting recommendations: ", err);
-//     });
-// });
