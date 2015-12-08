@@ -62,13 +62,13 @@ router.get('/start', ensureAuthenticated, function (req, res) {
         var venue = venueResp.response.venue;
 
         // dont bother if venue isn't open
-        if(venue.hours && !venue.hours.isOpen) {
-          return;
-        }
+        // if(venue.hours && !venue.hours.isOpen) {
+        //   return;
+        // }
 
         var venueGroup = getVenueGroup(venue.photos.groups);
         venueGroup.items.forEach(function(image) {
-          var size = "500x500";
+          var size = "300x300";
           var imgObj = {
             id: image.id,
             url: image.prefix + size + image.suffix,
@@ -77,6 +77,13 @@ router.get('/start', ensureAuthenticated, function (req, res) {
           };
           imgArr.push(imgObj);
         })
+      })
+    })
+    .then(function() {
+      // console.log(imgArr);
+      imgArr.forEach(v => {
+        v.tags = [];
+        v.categories.forEach(c => { v.tags.push(c.shortName) })
       })
     })
     .then(function() { res.json(_.shuffle(imgArr)) })

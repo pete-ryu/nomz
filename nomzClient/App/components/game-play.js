@@ -11,7 +11,6 @@ var color = require('./colors');
 var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
 var {
-  // Animation,
   Image,
   NavigatorIOS,
   StyleSheet,
@@ -20,8 +19,8 @@ var {
   View
 } = React;
 
-// const GAME_DATA_URL = 'http://localhost:1337/api/mock';
 const GAME_DATA_URL = 'http://localhost:1337/api/game/nomzStorage';
+// const GAME_DATA_URL = 'http://localhost:1337/api/game/start';
 const MIN_NUM_SWIPES = 20;
 
 var Application = React.createClass({
@@ -64,9 +63,6 @@ var Application = React.createClass({
       game_url += "?lat=" + this.state.geoPosition.coords.latitude;
       game_url += "&long=" + this.state.geoPosition.coords.longitude;
     }
-    // if(this.props.mealType) {
-    //   game_url += "&meal=" + this.props.mealType;
-    // }
     fetch(game_url)
     .then((response) => response.json())
     .then((response) => {
@@ -95,7 +91,7 @@ var Application = React.createClass({
     }
     this.setState({
       imgIndex: ++x,
-      currentImageUrl: this.state.imgAry[x]["url"] + "?rand="+ new Date().getTime()
+      currentImageUrl: this.state.imgAry[x]["url"] //+ "?rand="+ new Date().getTime()
       // add date so that image doesn't get cached
     });
   },
@@ -293,12 +289,12 @@ var styles = StyleSheet.create({
     position: 'absolute',
     top: 100,
     left: windowSize.width/2 - 150,
+    width: 300,
+    height: 300,
+    padding: 10,
     borderWidth: 3,
     borderRadius: 3,
     borderColor: '#000',
-    width: 300,
-    height: 300,
-    padding: 10
   },
   cardImage: {
     height: 274,
