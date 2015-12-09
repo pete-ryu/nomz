@@ -19,9 +19,9 @@ var {
   View
 } = React;
 
-const GAME_DATA_URL = 'http://localhost:1337/api/game/nomzStorage';
+// const GAME_DATA_URL = 'http://localhost:1337/api/game/nomzStorage';
 // const GAME_DATA_URL = 'http://localhost:1337/api/game/start';
-// const GAME_DATA_URL = 'http://localhost:1337/api/game/safe';
+const GAME_DATA_URL = 'http://localhost:1337/api/game/safe';
 const MIN_NUM_SWIPES = 20;
 
 var Application = React.createClass({
@@ -44,6 +44,7 @@ var Application = React.createClass({
       // not using Yes and No counts yet, but could be useful in the future
       Yes: 0,
       No: 0,
+      opacity: 1,
       background: "nomz"
     }
   },
@@ -112,6 +113,7 @@ var Application = React.createClass({
 
     // Step 1: reset image location
     this.setState({
+      opacity: 1,
       x: 0,
       y: 0,
     });
@@ -129,7 +131,6 @@ var Application = React.createClass({
   },
 
   makeSwipe: function(like) {
-    this.state.opacity = 1;
     this.savePreference(like);
     this.setState({
       answeredCount: ++this.state.answeredCount
@@ -185,13 +186,12 @@ var Application = React.createClass({
       x: e.nativeEvent.pageX,
       y: e.nativeEvent.pageY
     };
-    this.state.opacity = 0.5;
+    this.state.opacity = 0.55;
     return true;
   },
 
   _onMoveShouldSetResponder: function(e) {
     return true;
-
   },
 
   goToResults: function() {
@@ -241,11 +241,10 @@ var Application = React.createClass({
   renderCard: function() {
     return (
       <View style={styles.container}>
-          <Image source={{ uri: "nomz" , isStatic: true }} style={{position: 'absolute',
-        top: 0, bottom: 0, left: 0, right: 0}} />
+          <Image source={{ uri: "nomz" , isStatic: true }} style={styles.bgImg} />
           <View style={styles.cardFiller} >
           </View>
-          <View style={{flexDirection:'row'}}>
+          <View style={{flexDirection:'row', backgroundColor: 'transparent'}}>
             <TouchableOpacity style={styles.buttonYN} onPress={() => this.makeSwipe(false)}>
               <Image source={require('../images/food_no_icon.png')}/>
             </TouchableOpacity>
@@ -286,12 +285,17 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  resultsButton: {
-    alignItems:'center',
-    top: 65
+  bgImg: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    opacity: 0.9
   },
+
   cardFiller: {
-    height: 300
+    height: 320
   },
   card: {
     position: 'absolute',
@@ -303,25 +307,33 @@ var styles = StyleSheet.create({
     backgroundColor: 'transparent'
   },
   cardImage: {
-    height: 274,
+    height: 300,
+    borderWidth: 4,
+    borderRadius: 10,
+    borderColor: 'white'
   },
   buttonYN: {
-    padding: 25
+    paddingLeft: 35,
+    paddingRight: 35
+  },
+
+  resultsButton: {
+    alignItems:'center',
+    top: 65,
+    backgroundColor: 'transparent'
   },
   matchesBtn: {
+    flexDirection: 'column',
     fontSize: 20,
-    color: 'transparent',
+    color: 'white',
     padding: 10,
     borderWidth: 3,
-    borderRadius: 5
+    borderRadius: 5,
+    borderColor: 'white'
   },
   machesBtnDisable: {
     color: 'grey',
     borderColor: 'grey'
-  },
-  bg: {
-    flex: 1,
-    resizeMode: 'stretch'
   }
 });
 
