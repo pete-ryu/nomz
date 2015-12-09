@@ -21,6 +21,7 @@ var {
 
 const GAME_DATA_URL = 'http://localhost:1337/api/game/nomzStorage';
 // const GAME_DATA_URL = 'http://localhost:1337/api/game/start';
+// const GAME_DATA_URL = 'http://localhost:1337/api/game/safe';
 const MIN_NUM_SWIPES = 20;
 
 var Application = React.createClass({

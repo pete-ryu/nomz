@@ -20,7 +20,7 @@ var ensureAuthenticated = function (req, res, next) {
 // };
 
 router.get('/safe', function(req, res) {
-  let img = require('./cleaned_images.js');
+  let img = require('../services/safe-images.js');
   res.json(_.shuffle(img))
 });
 
