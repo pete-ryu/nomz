@@ -19,6 +19,11 @@ var ensureAuthenticated = function (req, res, next) {
 //     }
 // };
 
+router.get('/safe', function(req, res) {
+  let img = require('./cleaned_images.js');
+  res.json(_.shuffle(img))
+});
+
 router.get('/nomzStorage', ensureAuthenticated, function(req, res) {
   let respArr = [];
   MenuItem.find({})
