@@ -42,7 +42,8 @@ var Application = React.createClass({
       geoPosition: undefined,
       // not using Yes and No counts yet, but could be useful in the future
       Yes: 0,
-      No: 0
+      No: 0,
+      background: "nomz"
     }
   },
 
@@ -127,6 +128,7 @@ var Application = React.createClass({
   },
 
   makeSwipe: function(like) {
+    this.state.opacity = 1;
     this.savePreference(like);
     this.setState({
       answeredCount: ++this.state.answeredCount
@@ -182,11 +184,13 @@ var Application = React.createClass({
       x: e.nativeEvent.pageX,
       y: e.nativeEvent.pageY
     };
+    this.state.opacity = 0.5;
     return true;
   },
 
   _onMoveShouldSetResponder: function(e) {
     return true;
+
   },
 
   goToResults: function() {
@@ -232,9 +236,12 @@ var Application = React.createClass({
     )
   },
 
+
   renderCard: function() {
     return (
       <View style={styles.container}>
+          <Image source={{ uri: "nomz" , isStatic: true }} style={{position: 'absolute',
+        top: 0, bottom: 0, left: 0, right: 0}} />
           <View style={styles.cardFiller} >
           </View>
           <View style={{flexDirection:'row'}}>
@@ -264,7 +271,7 @@ var Application = React.createClass({
           >
             <Image
               source={{ uri: this.state.currentImageUrl }}
-              style={styles.cardImage}
+              style={[styles.cardImage, { opacity: this.state.opacity }]}
             />
           </View>
       </View>
@@ -291,21 +298,18 @@ var styles = StyleSheet.create({
     left: windowSize.width/2 - 150,
     width: 300,
     height: 300,
-    padding: 10,
-    borderWidth: 3,
-    borderRadius: 3,
-    borderColor: '#000',
+    padding: 1,
+    backgroundColor: 'transparent'
   },
   cardImage: {
     height: 274,
   },
-
   buttonYN: {
     padding: 25
   },
   matchesBtn: {
     fontSize: 20,
-    color: 'black',
+    color: 'transparent',
     padding: 10,
     borderWidth: 3,
     borderRadius: 5
@@ -313,6 +317,10 @@ var styles = StyleSheet.create({
   machesBtnDisable: {
     color: 'grey',
     borderColor: 'grey'
+  },
+  bg: {
+    flex: 1,
+    resizeMode: 'stretch'
   }
 });
 
