@@ -52,6 +52,11 @@ class Feed extends Component{
 
   _renderPost(data) {
     // return a view with the passed in data
+    return (
+      <View>
+        <Image />
+      </View>
+    )
   }
 
   render() {
