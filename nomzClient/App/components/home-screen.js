@@ -4,6 +4,8 @@ var Button = require('./react-native-button');
 var Play = require('./game-play');
 var Feed = require('./feed');
 var api = require('./utils/api');
+var PhotoUpload = require('./camera-roll-select-screen');
+
 var {
   StyleSheet,
   View,
@@ -45,7 +47,7 @@ var Homescreen = React.createClass({
   //   console.log('nextProps:', nextProps)
   //   if (nextProps.user) {
   //    //  this.setState({
-  //    //      // set something 
+  //    //      // set something
   //    // });
   //   }
   // },
@@ -82,6 +84,14 @@ var Homescreen = React.createClass({
      }).done()
   },
 
+  takePhoto() {
+    this.props.navigator.push({
+      title: 'Post a Pic',
+      component: PhotoUpload,
+      backButtonTitle: ' '
+    });
+  },
+
   render() {
     var authButton;
     // if user logged in (according to state, render login button)
@@ -114,6 +124,11 @@ var Homescreen = React.createClass({
             {"Play Nomz!"}
           </Button>
           { authButton }
+          <Button
+            style={styles.btn}
+            onPress={this.takePhoto}>
+            {"Take a photo"}
+          </Button>
         </View>
       </View>
     )
