@@ -40,12 +40,12 @@ const reactImageProject = React.createClass({
   },
 
   selectImage(uri) {
-    // NativeModules.ReadImageData.readImage(uri, (image) => {
-    //   this.setState({
-    //     selected: image,
-    //   });
-    //   console.log(image);
-    // });
+    NativeModules.ReadImageData.readImage(uri, (image) => {
+      this.setState({
+        selected: image,
+      });
+      console.log(image);
+    });
     console.log(uri);
   },
 
