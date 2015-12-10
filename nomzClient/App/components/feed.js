@@ -5,8 +5,11 @@ var React = require('react-native');
 var {
   Component,
   View,
+  Text,
+  StyleSheet,
   ListView,
   Image,
+  TouchableHighlight,
   ActivityIndicatorIOS
 } = React;
 
@@ -17,7 +20,7 @@ class Feed extends Component{
     super(props);
 
     var ds = new ListView.DataSource({
-      rowHasCHanged: (row1, row2) => row1 !== row2
+      rowHasChanged: (row1, row2) => row1 !== row2
     })
 
     this.state = {
@@ -32,6 +35,7 @@ class Feed extends Component{
     var id = 1
     api.fetchFeed(id)
       .then( data => {
+        console.log(data)
         if (data.message === 'Not Found') {// Double check server error
           this.setState({
             error: 'Feed not found for user',
@@ -47,14 +51,33 @@ class Feed extends Component{
   }
 
   _endLoading() {
-    this.state.isLoading: false
+    this.state.isLoading = false
   }
 
   _renderPost(data) {
     // return a view with the passed in data
     return (
-      <View>
-        <Image />
+      <View style={styles.post}>
+        <View style={styles.postHeader}>
+          <Text> { `MenuItem: ${data.menuItem}` } </Text>
+            <TouchableHighlight 
+              // style={styles.nomzButton}
+              underlayColor='transparant'>
+              <Text > !NOMZ_ICON! </Text>
+            </TouchableHighlight>
+        </View>
+        <Image 
+          style={styles.postImage}
+          source={{uri: data.imageUrl}}
+        />
+            <TouchableHighlight 
+            // style={styles.postUser}
+            underlayColor='transparant'>
+              <Text style={styles.postUser}> { `User: ${data._id}` } </Text>
+            </TouchableHighlight>
+        <View>
+          <Text> { data.caption } </Text>
+        </View>
       </View>
     )
   }
@@ -69,7 +92,7 @@ class Feed extends Component{
         <ListView
           dataSource={this.state.dataSource}
           renderRow={this._renderPost.bind(this)}
-          onEndReached={this._endLoading.bind(this)}
+          onEndReached={this._endLoading.bind(this)} />
       </View>
     )
   }
@@ -80,6 +103,36 @@ class Feed extends Component{
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center'
-  }
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  post: {
+    borderWidth: 3,
+    borderRadius: 3,
+    borderColor: '#000',
+    width: 400,
+    height: 400,
+    padding:10,
+    marginBottom: 20
+  },
+  postHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10
+  },
+  postImage: {
+    height: 360,
+    flex: 1
+  },
+  // postUser: {
+  //   marginTop: 15
+  // },
+  postUser: {
+    marginTop: 10,
+    color: 'green'
+  },
+
+
 })
+
+module.exports = Feed;
