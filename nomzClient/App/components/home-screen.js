@@ -2,6 +2,7 @@ var React = require('react-native');
 
 var Button = require('./react-native-button');
 var Play = require('./game-play');
+var Feed = require('./feed');
 
 var {
   StyleSheet,
@@ -23,6 +24,15 @@ var Homescreen = React.createClass({
     });
   },
 
+  getFeed() {
+  this.props.navigator.push({
+      title: 'Review Dishes',
+      component: Feed,
+      backButtonTitle: ' '
+      // backButtonTitle: 'Main Menu'
+    });
+  },
+
   render() {
     return (
       <View style={styles.container}>
@@ -37,7 +47,7 @@ var Homescreen = React.createClass({
           </Button>
           <Button
             style={styles.btn}
-            onPress={this.playGame}>
+            onPress={this.getFeed}>
             {"Log in with Foursquare"}
           </Button>
         </View>
