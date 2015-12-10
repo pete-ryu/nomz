@@ -20,7 +20,7 @@ router.post('/', ensureAuthenticated, function (req, res) {
     'radius': 1000
    };
    fsHelper.venues(params)
-   .then(venues => venues.response.venues.map(v =>
+   .then(venues => venues.map(v =>
      _.pick(v, 'id', 'name', 'location', 'categories', 'attributes', 'stats')
    ))
   .then(venues => makeRecommendation(prefs, venues))
