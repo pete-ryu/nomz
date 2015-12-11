@@ -38,14 +38,14 @@ class GameResults extends Component {
         url += "?lat=" + this.props.lat;
         url += "&long=" + this.props.long;
         fetch(url, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(this.props.preferences)
-        })
-        // fetch(url)
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(this.props.preferences)
+            })
+            // fetch(url)
             .then((res) => res.json())
             .then((resData) => {
                 this.setState({
@@ -58,37 +58,26 @@ class GameResults extends Component {
     renderRow(rowData) {
         // Use first category's image
         // Replace the url from the venue endpoint because it was returning xml instead of actual image
-        var venueImage = rowData.categories[0].icon.prefix.replace('ss3.4sqi.net', 'foursquare.com') + 'bg_64' + rowData.categories[0].icon.suffix,
+        var venueImage = rowData.details.bestPhoto.prefix.replace('ss3.4sqi.net', 'foursquare.com') + 'width' + rowData.details.bestPhoto.width + rowData.details.bestPhoto.suffix,
             venueDistance = rowData.location ? parseFloat((parseInt(rowData.location.distance) * 0.000621371)).toFixed(2) : '(?)';
 
         return (
             <TouchableHighlight onPress={() => this._onPress(rowData)} underlayColor='#ddd'>
               <View style={styles.rowContent}>
-                <View >
-                  <Image style={styles.venueImage} source={{uri: venueImage }} />
-                </View>
                 <View style={styles.venueDetails}>
                   <View style={styles.venueDetailsLeft}>
-                    <Text style={{fontWeight: 'bold'}}>
+                    <Text style={ styles.venueRating } >
+                        { rowData.details.rating }
+                    </Text>
+                    <Text style={ styles.venueHeader }>
                       { rowData.name }
                     </Text>
-                    <Text>
-                    { rowData.location
-                        ? rowData.location.address + '\n' + rowData.location.city + ', ' + rowData.location.state + ' ' + rowData.location.postalCode
-                        : '(Not Available)'
-                    }
+                    <Text style={ styles.venueSubheader }>
+                        { venueDistance + ' mi' }
                     </Text>
-                  </View>
-                  <View style={styles.venueDetailsRight}>
-                    <Text>
-                      { venueDistance + ' mi' }
-                    </Text>
-                    <View style={styles.checkin}>
-                        <Text>
-                          { rowData.stats.checkinsCount }
-                        </Text>
-                        <Image style={styles.checkinImage} source={{ uri: 'https://cdn4.iconfinder.com/data/icons/eldorado-mobile/40/location_current-20.png' }} />
                     </View>
+                  <View style={styles.venueDetailsRight}>
+                    <Image style={styles.venueImage} source={{ uri: venueImage }} />
                   </View>
                 </View>
               </View>
@@ -133,34 +122,52 @@ var styles = StyleSheet.create({
     rowContent: {
         flex: 1,
         flexDirection: 'row',
-        paddingVertical: 10,
-        paddingLeft: 10,
         borderColor: '#D7D7D7',
-        borderBottomWidth: 1
-    },
-    venueImage: {
-        width: 50,
-        height: 50
+        borderBottomWidth: 1,
+        height: 120,
+        backgroundColor: '#000'
     },
     venueDetails: {
         flexDirection: 'row',
-        flex: 1
+        flex: 1,
+        paddingLeft: 15
     },
     venueDetailsLeft: {
-        marginLeft: 10,
-        flexDirection: 'column'
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0
     },
     venueDetailsRight: {
-        marginRight: 10,
         flex: 1,
         alignItems: 'flex-end',
     },
-    checkinImage: {
-        width: 20,
-        height: 20
+    venueImage: {
+        width: 150,
+        height: 150
     },
-    checkin: {
-        flexDirection: 'row'
+    venueHeader: {
+        fontWeight: 'bold', 
+        color: 'white', 
+        fontSize: 20,
+        backgroundColor: 'transparent'
+    },
+    venueSubheader: {
+        fontWeight: 'bold', 
+        color: 'white',
+        backgroundColor: 'transparent'
+    },
+    venueRating: {
+        position: 'absolute', 
+        left: 20, 
+        top: -10,
+        fontSize: 110, 
+        color: '#4169E1', 
+        opacity: 0.5, 
+        backgroundColor: 'transparent'
     }
 });
 

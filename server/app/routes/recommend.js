@@ -21,7 +21,7 @@ router.post('/', ensureAuthenticated, function (req, res) {
    };
    fsHelper.venues(params)
    .then(venues => venues.map(v =>
-     _.pick(v, 'id', 'name', 'location', 'categories', 'attributes', 'stats')
+     _.pick(v, 'id', 'name', 'location', 'categories', 'attributes', 'stats', 'details')
    ))
   .then(venues => makeRecommendation(prefs, venues))
   .then(arr => res.json(arr))

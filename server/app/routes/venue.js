@@ -27,7 +27,7 @@ router.get('/near', ensureAuthenticated, function (req, res) {
    fsHelper.venues(params)
    .then(function(venues) {
      res.json(venues.map(function(v) {
-       return _.pick(v, 'id', 'name', 'location', 'categories', 'attributes', 'stats');
+       return _.pick(v, 'id', 'name', 'location', 'categories', 'attributes', 'stats', 'details');
      }))
    })
    .catch(function(err) { res.sendStatus(404); })
