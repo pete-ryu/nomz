@@ -63,7 +63,7 @@ class Feed extends Component{
             <TouchableHighlight 
               // style={styles.nomzButton}
               underlayColor='transparant'>
-              <Text > !NOMZ_ICON! </Text>
+              <Text> !NOMZ_ICON! </Text>
             </TouchableHighlight>
         </View>
         <Image 
@@ -85,14 +85,19 @@ class Feed extends Component{
   render() {
     return (
       <View style={styles.container}>
-        <ActivityIndicatorIOS
-          animating={this.state.isLoading}
-          color='#111'
-          size='large' />
-        <ListView
-          dataSource={this.state.dataSource}
-          renderRow={this._renderPost.bind(this)}
-          onEndReached={this._endLoading.bind(this)} />
+       <View>
+         <Text> Hey Whussup Hello </Text>
+        </View>
+        <View style={styles.container} >
+          <ActivityIndicatorIOS
+            animating={this.state.isLoading}
+            color='#111'
+            size='large' />
+          <ListView
+            dataSource={this.state.dataSource}
+            renderRow={this._renderPost.bind(this)}
+            onEndReached={this._endLoading.bind(this)} />
+        </View>
       </View>
     )
   }
@@ -103,7 +108,7 @@ class Feed extends Component{
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center'
   },
   post: {
