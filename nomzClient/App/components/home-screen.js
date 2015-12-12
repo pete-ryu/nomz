@@ -3,6 +3,7 @@ var React = require('react-native');
 var Button = require('./react-native-button');
 var Play = require('./game-play');
 var Feed = require('./feed');
+var Auth = require('./Auth/auth');
 
 var {
   StyleSheet,
@@ -27,7 +28,7 @@ var Homescreen = React.createClass({
   getFeed() {
   this.props.navigator.push({
       title: 'Review Dishes',
-      component: Feed,
+      component: Auth,
       backButtonTitle: ' '
       // backButtonTitle: 'Main Menu'
     });

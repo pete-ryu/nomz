@@ -85,9 +85,6 @@ class Feed extends Component{
   render() {
     return (
       <View style={styles.container}>
-       <View>
-         <Text> Hey Whussup Hello </Text>
-        </View>
         <View style={styles.container} >
           <ActivityIndicatorIOS
             animating={this.state.isLoading}
@@ -114,7 +111,7 @@ var styles = StyleSheet.create({
   post: {
     borderWidth: 3,
     borderRadius: 3,
-    borderColor: '#000',
+      borderColor: '#000',
     width: 400,
     height: 400,
     padding:10,
