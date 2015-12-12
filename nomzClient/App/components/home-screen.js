@@ -3,10 +3,7 @@ var React = require('react-native');
 var Button = require('./react-native-button');
 var Play = require('./game-play');
 var Feed = require('./feed');
-var Auth = require('./Auth/auth');
-
-// var { LoginButton } = require('./Auth/AuthButtons');
-
+var api = require('./utils/api');
 var {
   StyleSheet,
   View,
@@ -19,29 +16,39 @@ var {
 
 
 var Homescreen = React.createClass({
-  // getInitialState() {
-  //   return {
-  //     isLoading: true,
-  //     isLoggedIn: false
+  getInitialState() {
+    return {
+      isLoading: true,
+      isLoggedIn: false
+    }
+  },
+
+  // On mount, check for user in Async Storage and update state accordingly
+  componentWillMount() {
+    AsyncStorage.getItem('userId').then( val => {
+      if (!val) {
+        this.setState({
+          isLoading: false,
+          isLoggedIn: false
+        })
+      } else {
+        this.setState({
+          isLoading: false,
+          isLoggedIn: true
+        })
+      }
+    })
+  },
+
+
+  // componentWillReceiveProps(nextProps) {
+  //   console.log('nextProps:', nextProps)
+  //   if (nextProps.user) {
+  //    //  this.setState({
+  //    //      // set something 
+  //    // });
   //   }
   // },
-
-  // componentWillMount() {
-  //   AsyncStorage.getItem('userId').then( val => {
-  //     if (!val) {
-  //       this.setState({
-  //         isLoading: false,
-  //         isLoggedIn: false
-  //       })
-  //     } else {
-  //       this.setState({
-  //         isLoading: false,
-  //         isLoggedIn: true
-  //       })
-  //     }
-  //   })
-  // },
-
 
   playGame() {
     this.props.navigator.push({
@@ -55,29 +62,30 @@ var Homescreen = React.createClass({
   goToLogin() {
     this.props.navigator.push({
       title: 'Review Dishes',
-      component: Auth,
+      component: require('./Auth/auth'),
       backButtonTitle: ' '
       // backButtonTitle: 'Main Menu'
     });
   },
 
+
   logout() {
-    AsyncStorage.removeItem('userId')
-      .then( () => {
-        console.log('removing item from storage')
-         console.log(this.props)
-         this.props.user = null;
-         // this.forceUpdate()
-         console.log(this.props)
-       }).done()
-   
+    // send logout request
+    api.logout().then( res => {
+      if (res.status === 200) {
+        return AsyncStorage.removeItem('userId')
+      }
+    }).then( () => {
+       // update the state to reflect logged out user
+       this.props.user = null;
+       this.setState({isLoggedIn: false});
+     }).done()
   },
 
   render() {
-    console.log('rendering home screen:',this.props)
     var authButton;
-    if (!this.props.user) {
-      // authButton = <authButton onPress={this.goToLogin} />
+    // if user logged in (according to state, render login button)
+    if (!this.state.isLoggedIn) {
       authButton = (
         <Button
           style={styles.btn}
@@ -85,7 +93,7 @@ var Homescreen = React.createClass({
           {"Log in with Foursquare"}
         </Button>
       )
-    } else {
+    } else { // otherwise, render logout button
         authButton = (
           <Button
             style={styles.btn}

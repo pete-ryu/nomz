@@ -4,6 +4,7 @@ var React = require("react-native");
 var api = require('../utils/api');
 var Button = require('../react-native-button');
 var Home = require('../home-screen');
+
 var {
     Component,
     StyleSheet,
@@ -24,7 +25,6 @@ class LoginView extends Component {
             isLoading: false,
             error: false
         };
-        // this.onSubmitPressed = this.onSubmitPressed.bind(this)
     }
  
    onSubmitPressed() {
@@ -39,25 +39,25 @@ class LoginView extends Component {
             email: this.state.email.trim(),
             password: this.state.password.trim()
         }).then( (res) => {
-            console.log('inside the then', res.user._id.toString())
+            // If successful response from login, store userid in AsyncStorage
             return AsyncStorage.setItem('userId', res.user._id)
         }).then( (id) => {
-            console.log('stored to asyncStorage:', id);
+            // navigate to homepage once userid is stored
             this.props.navigator.replace({
                 component: Home,
                 passProps: { user: id }
             })
         }).catch( val => {
+            // TODO: Better error handling
             console.log(val)
 
-        })
-
-        .done()
+        }).done()
     }
 
 
     render() {
-        // console.log(this.state)
+        console.log('home:', Home);
+
         return (
             <View style={styles.container}>
                 <Text style={styles.title}>
@@ -86,21 +86,6 @@ class LoginView extends Component {
         );
     }
  
-    // onSubmitPressed() {
-    //     console.log('submit Pressed')
-    //     // Make api post request and login user
-    //     // go to next state
-    //     api.login({
-    //         email: this.state.email,
-    //         password: this.state.password
-    //     }).then( res => {
-    //         if (res.message === 'Invalid login credentials.') {
-    //             console.log("Invalid login!")
-    //         } else {
-    //             console.log(res)
-    //         }
-    //     })
-    // }
  
 };
  
@@ -154,8 +139,5 @@ var styles = StyleSheet.create({
         alignSelf: "center"
     },
 });
- 
-                    //  <TouchableHighlight onPress={(this.onSubmitPressed.bind(this))} style={styles.button}>
-                    //     <Text style={styles.buttonText}>Submit</Text>
-                    // </TouchableHighlight>
+
 module.exports = LoginView;

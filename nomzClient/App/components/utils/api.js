@@ -26,6 +26,11 @@ var api = {
         return res.json();
       }
     })
+  },
+
+  logout() {
+    const LOGOUT_URL = 'http://localhost:1337/logout';
+    return fetch(LOGOUT_URL).then( (res) => res )
   }
 
 }

@@ -6,8 +6,8 @@
 
 var React = require('react-native');
 // var Game = require('./App/components/game-play');
-var Home = require('./App/components/home-screen');
-
+// var Home = require('./App/components/home-screen');
+var Auth = require('./App/components/Auth/auth');
 var {
   AppRegistry,
   StyleSheet,
@@ -22,6 +22,7 @@ class nomzClient extends Component{
   constructor(props) {
     super(props);
     this.state = {
+      isLoggedIn: false,
       isLoading: true,
       user: null
     }
@@ -38,7 +39,8 @@ class nomzClient extends Component{
         console.log('fetched from storage:', val)
         this.setState({
           isLoading: false,
-          user: val
+          user: val,
+          isLoggedIn: true
         })
       }
     }).done()
@@ -46,8 +48,10 @@ class nomzClient extends Component{
 
 
   render() {
-    console.log('in index, state.user:', this.state)
+    // console.log('in index, state.user:', this.state)
     var homepage;
+    // confirm whether user is logged in based on state and select next view accordingly
+    var nextRoute = this.state.isLoggedIn ? require('./App/components/home-screen') : Auth
     if (!this.state.isLoading) {
          homepage = (
         <NavigatorIOS
@@ -57,8 +61,8 @@ class nomzClient extends Component{
             title: 'Nomz!',
             backButtonTitle: ' ',
             description: 'Nomz! - the best new way to find food',
-            component: Home,
-            passProps: { user: this.state.user, test: 'test' }
+            component: nextRoute,
+            passProps: { user: this.state.user }
         }} />
       )
     } else {
