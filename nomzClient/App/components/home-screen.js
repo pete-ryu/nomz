@@ -2,18 +2,54 @@ var React = require('react-native');
 
 var Button = require('./react-native-button');
 var Play = require('./game-play');
-
+var Feed = require('./feed');
+var api = require('./utils/api');
 var {
   StyleSheet,
   View,
   Text,
   Image,
   NavigatorIOS,
-  TouchableOpacity
+  TouchableOpacity,
+  AsyncStorage
 } = React;
 
 
 var Homescreen = React.createClass({
+  getInitialState() {
+    return {
+      isLoading: true,
+      isLoggedIn: false
+    }
+  },
+
+  // On mount, check for user in Async Storage and update state accordingly
+  componentWillMount() {
+    AsyncStorage.getItem('userId').then( val => {
+      if (!val) {
+        this.setState({
+          isLoading: false,
+          isLoggedIn: false
+        })
+      } else {
+        this.setState({
+          isLoading: false,
+          isLoggedIn: true
+        })
+      }
+    })
+  },
+
+
+  // componentWillReceiveProps(nextProps) {
+  //   console.log('nextProps:', nextProps)
+  //   if (nextProps.user) {
+  //    //  this.setState({
+  //    //      // set something 
+  //    // });
+  //   }
+  // },
+
   playGame() {
     this.props.navigator.push({
       title: 'Review Dishes',
@@ -23,7 +59,49 @@ var Homescreen = React.createClass({
     });
   },
 
+  goToLogin() {
+    this.props.navigator.push({
+      title: 'Review Dishes',
+      component: require('./Auth/auth'),
+      backButtonTitle: ' '
+      // backButtonTitle: 'Main Menu'
+    });
+  },
+
+
+  logout() {
+    // send logout request
+    api.logout().then( res => {
+      if (res.status === 200) {
+        return AsyncStorage.removeItem('userId')
+      }
+    }).then( () => {
+       // update the state to reflect logged out user
+       this.props.user = null;
+       this.setState({isLoggedIn: false});
+     }).done()
+  },
+
   render() {
+    var authButton;
+    // if user logged in (according to state, render login button)
+    if (!this.state.isLoggedIn) {
+      authButton = (
+        <Button
+          style={styles.btn}
+          onPress={this.goToLogin}>
+          {"Log in with Foursquare"}
+        </Button>
+      )
+    } else { // otherwise, render logout button
+        authButton = (
+          <Button
+            style={styles.btn}
+            onPress={this.logout}>
+            {"Log Out"}
+          </Button>
+      )
+    }
     return (
       <View style={styles.container}>
       <Image source={{ uri: "nomz" , isStatic: true }} style={styles.bgImg} />
@@ -35,11 +113,7 @@ var Homescreen = React.createClass({
             onPress={this.playGame}>
             {"Play Nomz!"}
           </Button>
-          <Button
-            style={styles.btn}
-            onPress={this.playGame}>
-            {"Log in with Foursquare"}
-          </Button>
+          { authButton }
         </View>
       </View>
     )
