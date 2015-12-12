@@ -5,17 +5,44 @@ var Play = require('./game-play');
 var Feed = require('./feed');
 var Auth = require('./Auth/auth');
 
+// var { LoginButton } = require('./Auth/AuthButtons');
+
 var {
   StyleSheet,
   View,
   Text,
   Image,
   NavigatorIOS,
-  TouchableOpacity
+  TouchableOpacity,
+  AsyncStorage
 } = React;
 
 
 var Homescreen = React.createClass({
+  // getInitialState() {
+  //   return {
+  //     isLoading: true,
+  //     isLoggedIn: false
+  //   }
+  // },
+
+  // componentWillMount() {
+  //   AsyncStorage.getItem('userId').then( val => {
+  //     if (!val) {
+  //       this.setState({
+  //         isLoading: false,
+  //         isLoggedIn: false
+  //       })
+  //     } else {
+  //       this.setState({
+  //         isLoading: false,
+  //         isLoggedIn: true
+  //       })
+  //     }
+  //   })
+  // },
+
+
   playGame() {
     this.props.navigator.push({
       title: 'Review Dishes',
@@ -25,8 +52,8 @@ var Homescreen = React.createClass({
     });
   },
 
-  getFeed() {
-  this.props.navigator.push({
+  goToLogin() {
+    this.props.navigator.push({
       title: 'Review Dishes',
       component: Auth,
       backButtonTitle: ' '
@@ -34,7 +61,39 @@ var Homescreen = React.createClass({
     });
   },
 
+  logout() {
+    AsyncStorage.removeItem('userId')
+      .then( () => {
+        console.log('removing item from storage')
+         console.log(this.props)
+         this.props.user = null;
+         // this.forceUpdate()
+         console.log(this.props)
+       }).done()
+   
+  },
+
   render() {
+    console.log('rendering home screen:',this.props)
+    var authButton;
+    if (!this.props.user) {
+      // authButton = <authButton onPress={this.goToLogin} />
+      authButton = (
+        <Button
+          style={styles.btn}
+          onPress={this.goToLogin}>
+          {"Log in with Foursquare"}
+        </Button>
+      )
+    } else {
+        authButton = (
+          <Button
+            style={styles.btn}
+            onPress={this.logout}>
+            {"Log Out"}
+          </Button>
+      )
+    }
     return (
       <View style={styles.container}>
       <Image source={{ uri: "nomz" , isStatic: true }} style={styles.bgImg} />
@@ -46,11 +105,7 @@ var Homescreen = React.createClass({
             onPress={this.playGame}>
             {"Play Nomz!"}
           </Button>
-          <Button
-            style={styles.btn}
-            onPress={this.getFeed}>
-            {"Log in with Foursquare"}
-          </Button>
+          { authButton }
         </View>
       </View>
     )
