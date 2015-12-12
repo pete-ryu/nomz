@@ -51,7 +51,7 @@ class nomzClient extends Component{
     // console.log('in index, state.user:', this.state)
     var homepage;
     // confirm whether user is logged in based on state and select next view accordingly
-    var nextRoute = this.state.isLoggedIn ? require('./App/components/home-screen') : Auth
+    // var nextRoute = this.state.isLoggedIn ? require('./App/components/home-screen') : Auth
     if (!this.state.isLoading) {
          homepage = (
         <NavigatorIOS
@@ -61,9 +61,9 @@ class nomzClient extends Component{
             title: 'Nomz!',
             backButtonTitle: ' ',
             description: 'Nomz! - the best new way to find food',
-            component: nextRoute,
+            component: require('./App/components/home-screen'),
             passProps: { user: this.state.user }
-        }} />
+          }} />
       )
     } else {
       // TODO: Maybe update to an activity indicator...

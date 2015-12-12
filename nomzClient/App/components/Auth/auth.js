@@ -28,7 +28,7 @@ class LoginView extends Component {
     }
  
    onSubmitPressed() {
-        console.log('submit Pressed')
+        // console.log('submit Pressed')
         // console.log(this.state)
         this.setState({
             isLoading: true

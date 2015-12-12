@@ -60,7 +60,7 @@ var Homescreen = React.createClass({
   },
 
   goToLogin() {
-    this.props.navigator.push({
+    this.props.navigator.replace({
       title: 'Review Dishes',
       component: require('./Auth/auth'),
       backButtonTitle: ' '
@@ -90,7 +90,7 @@ var Homescreen = React.createClass({
         <Button
           style={styles.btn}
           onPress={this.goToLogin}>
-          {"Log in with Foursquare"}
+          {"Log in"}
         </Button>
       )
     } else { // otherwise, render logout button
