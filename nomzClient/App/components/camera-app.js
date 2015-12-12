@@ -2,9 +2,10 @@ var React = require('react-native');
 var {
   AppRegistry,
   StyleSheet,
+  Image,
   Text,
   View,
-  TouchableHighlight
+  TouchableOpacity
 } = React;
 var Camera = require('react-native-camera');
 var Button = require('./react-native-button');
@@ -26,16 +27,12 @@ var cameraApp = React.createClass({
         onBarCodeRead={this._onBarCodeRead}
         type={this.state.cameraType}
       >
-        <Button
-          style={styles.btn}
-          onPress={this._switchCamera}>
-          {"Switch camera"}
-        </Button>
-        <Button
-          style={styles.btn}
-          onPress={this._takePicture}>
-          {"Take photo"}
-        </Button>
+        <TouchableOpacity style={styles.bottomL} onPress={this._switchCamera}>
+          <Image source={require('../images/camera-rotate-icon.png')}/>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.bottomR} onPress={this._takePicture}>
+          <Image source={require('../images/camera-icon.png')}/>
+        </TouchableOpacity>
       </Camera>
     );
   },
@@ -63,6 +60,18 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'transparent',
   },
+
+  bottomL: {
+    position: 'absolute',
+    bottom: 25,
+    left: 25
+  },
+  bottomR: {
+    position: 'absolute',
+    bottom: 25,
+    right: 25
+  },
+
 
   btn: {
     flexDirection: 'row',
