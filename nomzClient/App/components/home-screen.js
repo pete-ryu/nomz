@@ -1,7 +1,7 @@
 var React = require('react-native');
 
 var Button = require('./react-native-button');
-var Play = require('./game-play');
+var Play = require('./game-play-screen');
 var Feed = require('./feed');
 var api = require('./utils/api');
 var PhotoUpload = require('./camera-roll-select-screen');
