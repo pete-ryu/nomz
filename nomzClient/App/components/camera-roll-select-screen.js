@@ -1,5 +1,7 @@
 const React = require('react-native');
 
+const postUrl = "http://localhost:1337/api/upload";
+
 const {
   AppRegistry,
   StyleSheet,
@@ -40,11 +42,21 @@ const reactImageProject = React.createClass({
   },
 
   selectImage(uri) {
-    NativeModules.ReadImageData.readImage(uri, (image) => {
+    console.log("URI: ", uri);
+    NativeModules.ReadImageData.readImageFull(uri, (image) => {
       this.setState({
         selected: image,
       });
-      console.log(image);
+
+      fetch(postUrl, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ user: "VyinUZ04x", image: image })
+      })
+      // .then((res) => res.json())
     });
     console.log(uri);
   },
