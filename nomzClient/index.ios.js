@@ -36,9 +36,9 @@ class nomzClient extends Component{
         this.setState({
           isLoading: false,
         })
-        console.log('No User Session');
+        // console.log('No User Session');
       } else {
-        console.log('Initial fetch from storage in index:', val)
+        // console.log('Initial fetch from storage in index:', val)
         this.setState({
           isLoading: false,
           user: val,
