@@ -19,7 +19,8 @@ var Homescreen = React.createClass({
   getInitialState() {
     return {
       isLoading: true,
-      isLoggedIn: false
+      isLoggedIn: false,
+      user: null,
     }
   },
 
@@ -34,7 +35,8 @@ var Homescreen = React.createClass({
       } else {
         this.setState({
           isLoading: false,
-          isLoggedIn: true
+          isLoggedIn: true,
+          user: val
         })
       }
     })
@@ -61,13 +63,30 @@ var Homescreen = React.createClass({
 
   goToLogin() {
     this.props.navigator.replace({
-      title: 'Review Dishes',
+      title: 'Login',
       component: require('./Auth/auth'),
       backButtonTitle: ' '
       // backButtonTitle: 'Main Menu'
     });
   },
 
+  goToFeed() {
+    this.props.navigator.push({
+      title: 'My Feed',
+      component: require('./feed'),
+      backButtonTitle: 'Home',
+      passProps: { user: this.state.user }
+    })
+  },
+
+  goToProfile() {
+    this.props.navigator.push({
+      title: 'Profile',
+      component: require('./profile/profile'),
+      backButtonTitle: 'Home',
+      passProps: { user: this.state.user }
+    })
+  },
 
   logout() {
     // send logout request
@@ -78,12 +97,14 @@ var Homescreen = React.createClass({
     }).then( () => {
        // update the state to reflect logged out user
        this.props.user = null;
-       this.setState({isLoggedIn: false});
+       this.setState({isLoggedIn: false, user: null});
      }).done()
   },
 
   render() {
     var authButton;
+    var feedButton;
+    var profileButton;
     // if user logged in (according to state, render login button)
     if (!this.state.isLoggedIn) {
       authButton = (
@@ -92,7 +113,10 @@ var Homescreen = React.createClass({
           onPress={this.goToLogin}>
           {"Log in"}
         </Button>
-      )
+      );
+      feedButton = <View></View>
+      profileButton = <View></View>
+
     } else { // otherwise, render logout button
         authButton = (
           <Button
@@ -100,7 +124,24 @@ var Homescreen = React.createClass({
             onPress={this.logout}>
             {"Log Out"}
           </Button>
+      ),
+        // feedButton = <View></View>
+      feedButton = (
+        <Button
+          style={styles.btn}
+          onPress={this.goToFeed}>
+          {"My Feed"}
+        </Button>
+      ),
+
+      profileButton = (
+        <Button
+          style={styles.btn}
+          onPress={this.goToProfile}>
+          {'Profile'}
+        </Button>
       )
+
     }
     return (
       <View style={styles.container}>
@@ -114,6 +155,8 @@ var Homescreen = React.createClass({
             {"Play Nomz!"}
           </Button>
           { authButton }
+          { feedButton }
+          { profileButton }
         </View>
       </View>
     )

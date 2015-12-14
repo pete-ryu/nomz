@@ -36,7 +36,7 @@ class LoginView extends Component {
         // Make api post request and login user
         // go to next state
         api.login({
-            email: this.state.email.trim(),
+            email: this.state.email.trim().toLowerCase(),
             password: this.state.password.trim()
         }).then( (res) => {
             // If successful response from login, store userid in AsyncStorage
@@ -56,7 +56,6 @@ class LoginView extends Component {
 
 
     render() {
-        console.log('home:', Home);
 
         return (
             <View style={styles.container}>

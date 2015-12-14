@@ -31,6 +31,17 @@ var api = {
   logout() {
     const LOGOUT_URL = 'http://localhost:1337/logout';
     return fetch(LOGOUT_URL).then( (res) => res )
+  },
+
+  fetchUser(id) {
+    const USER_URL = `http://localhost:1337/api/users/${id}`;
+    return fetch(USER_URL).then( (res) => {
+      if (res.status !== 200) {
+        throw new Error(res)
+      } else {
+        return res.json()
+      }
+    })
   }
 
 }
