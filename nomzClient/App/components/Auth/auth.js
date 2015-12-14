@@ -5,6 +5,7 @@ var api = require('../utils/api');
 var Button = require('../react-native-button');
 var Home = require('../home-screen');
 
+
 var {
     Component,
     StyleSheet,
@@ -12,8 +13,11 @@ var {
     TextInput,
     TouchableHighlight,
     View,
-    AsyncStorage
+    AsyncStorage,
+    Image
 } = React;
+
+var Icon = require('react-native-vector-icons/FontAwesome');
   
 class LoginView extends Component {
  
@@ -26,60 +30,74 @@ class LoginView extends Component {
             error: false
         };
     }
+
  
    onSubmitPressed() {
-        // console.log('submit Pressed')
-        // console.log(this.state)
         this.setState({
             isLoading: true
         })
         // Make api post request and login user
-        // go to next state
+        let userId;
         api.login({
             email: this.state.email.trim().toLowerCase(),
             password: this.state.password.trim()
         }).then( (res) => {
-            // If successful response from login, store userid in AsyncStorage
+            userId = res.user._id
+            // If successful response from login, store userId in AsyncStorage
             return AsyncStorage.setItem('userId', res.user._id)
-        }).then( (id) => {
-            // navigate to homepage once userid is stored
+        }).then( (res) => {
+            // console.log('after setItem is called with the id:', id)
+            // navigate to homepage once userId is stored
             this.props.navigator.replace({
                 component: Home,
-                passProps: { user: id }
+                passProps: { userId: userId }
             })
-        }).catch( val => {
-            // TODO: Better error handling
-            console.log(val)
+        }).catch( (err) => {
+            console.log(err)
+            this.setState({
+                error: err.message
+            })
 
         }).done()
     }
 
 
     render() {
+        var showErr = (
+          this.state.error ? <Text> {this.state.error} </Text> : <View></View>
+        );
 
+        var userIcon = (<Icon name="user" size={20} style={styles.icon} />)
+        var passIcon = (<Icon name="lock" size={20} style={styles.icon} />)
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>
-                    Sign In
-                </Text>
-                <View>
-                    <TextInput
-                        placeholder="Email"
-                        onChange={(event) => this.setState({email: event.nativeEvent.text})}
-                        style={styles.formInput}
-                        value={this.state.email} />
-                    <TextInput
-                        placeholder="Password"
-                        secureTextEntry={true}
-                        onChange={(event) => this.setState({password: event.nativeEvent.text})}
-                        style={styles.formInput}
-                        value={this.state.password} />
+                <Image source={{ uri: "nomz" , isStatic: true }} style={styles.bgImg} />
+                <View style={styles.form}>
+                    <View style={styles.input}>
+                        <View style={styles.inputHolder}>
+                            {userIcon}
+                            <TextInput
+                                placeholder="Email"
+                                onChange={(event) => this.setState({email: event.nativeEvent.text})}
+                                style={styles.formInput}
+                                value={this.state.email} />
+                        </View>
+                        <View style={styles.inputHolder}>
+                            {passIcon}
+                            <TextInput
+                                placeholder="Password"
+                                secureTextEntry={true}
+                                onChange={(event) => this.setState({password: event.nativeEvent.text})}
+                                style={styles.formInput}
+                                value={this.state.password} />
+                        </View>
+                    </View>
                     <Button
                         style={styles.btn}
                         onPress={this.onSubmitPressed.bind(this)} >
                         {"Login"}
                     </Button>
-
+                    { showErr }
                 </View>
             </View>
         );
@@ -92,11 +110,22 @@ var styles = StyleSheet.create({
     container: {
         padding: 30,
         marginTop: 65,
-        alignItems: "stretch"
+        flex: 1,
     },
     title: {
         fontSize: 18,
-        marginBottom: 10
+        marginBottom: 10,
+        backgroundColor: 'transparant',
+        color: 'white'
+    },
+    form: {
+        backgroundColor: 'transparant',
+        marginTop: 300
+
+    },
+    inputHolder: {
+        flex: 1,
+        flexDirection: 'row'
     },
     formInput: {
         height: 36,
@@ -106,21 +135,30 @@ var styles = StyleSheet.create({
         marginTop: 5,
         flex: 1,
         fontSize: 18,
-        borderWidth: 1,
-        borderColor: "#555555",
-        borderRadius: 8,
+        backgroundColor: 'rgba(255, 255, 255, 0.6)',
         color: "#555555"
+    },
+    icon: {
+        color: '#555',
+        height: 36,
+        paddingLeft: 10,
+        paddingTop: 7,
+        marginTop: 5,
+        backgroundColor: 'white',
+        backgroundColor: 'rgba(255, 255, 255, 0.6)',
+        borderTopLeftRadius: 5,
+        borderBottomLeftRadius: 5
     },
     btn: {
       flexDirection: 'row',
-      width: 300,
+      width: 310,
       fontSize: 20,
-      color: 'black',
+      color: 'white',
       padding: 10,
       marginBottom: 20,
-      borderWidth: 2,
-      borderRadius: 5,
-      borderColor: '#007aff'
+      marginTop: 20,
+      borderColor: '#df6260',
+      backgroundColor: '#df6260'
     },
     button: {
         height: 36,
@@ -137,6 +175,14 @@ var styles = StyleSheet.create({
         color: "#ffffff",
         alignSelf: "center"
     },
+    bgImg: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        opacity: 0.9
+  }
 });
 
 module.exports = LoginView;

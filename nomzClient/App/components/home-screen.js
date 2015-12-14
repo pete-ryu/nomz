@@ -25,21 +25,36 @@ var Homescreen = React.createClass({
   },
 
   // On mount, check for user in Async Storage and update state accordingly
+  // componentWillMount() {
+  //   AsyncStorage.getItem('userId').then( val => {
+  //     if (!val) {
+  //       this.setState({
+  //         isLoading: false,
+  //         isLoggedIn: false
+  //       })
+  //     } else {
+  //       this.setState({
+  //         isLoading: false,
+  //         isLoggedIn: true,
+  //         user: val
+  //       })
+  //     }
+  //   })
+  // },
+
   componentWillMount() {
-    AsyncStorage.getItem('userId').then( val => {
-      if (!val) {
+    console.log('mounting component...')
+    let userId = this.props.userId;
+    console.log('api call for user:', userId)
+    api.fetchUser(userId)
+      .then( (user) => {
+        console.log('fetched user from api call:', user);
         this.setState({
-          isLoading: false,
-          isLoggedIn: false
-        })
-      } else {
-        this.setState({
-          isLoading: false,
+          user: user,
           isLoggedIn: true,
-          user: val
+          isLoading: false
         })
-      }
-    })
+      })
   },
 
 
@@ -102,6 +117,8 @@ var Homescreen = React.createClass({
   },
 
   render() {
+    console.log('homepage Props:', this.props)
+    console.log('homepage State:', this.state)
     var authButton;
     var feedButton;
     var profileButton;

@@ -24,12 +24,6 @@ var styles = StyleSheet.create({
     color: 'white'
   },
 
-  handle: {
-    fontSize: 16,
-    color: 'white',
-    alignSelf: 'center'
-  },
-
   image: {
     height: 125,
     width: 125,
