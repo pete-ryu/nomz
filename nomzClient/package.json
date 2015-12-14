@@ -6,6 +6,9 @@
     "start": "react-native start"
   },
   "dependencies": {
-    "react-native": "^0.14.2"
+    "react-native": "^0.14.2",
+    "react-native-blur": "^0.7.6",
+    "react-native-parallax-view": "^2.0.3",
+    "react-native-vector-icons": "^1.0.1"
   }
 }

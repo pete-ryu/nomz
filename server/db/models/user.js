@@ -88,17 +88,46 @@ schema.methods.correctPassword = function(candidatePassword) {
     return encryptPassword(candidatePassword, this.salt) === this.password;
 }
 
-schema.methods.getFeed = function() {
-    return this.model('User').populate(this, { path: 'following'})
-        .then( user => {
-            var friendsPosts = _.pluck(user.following, 'posts')
-            return _.chain(friendsPosts)
-                            .flatten()
-                            .sortBy('date')
-                            .reverse()
+// schema.methods.getFeed = function() {
+//     return this.model('User').populate(this, { path: 'following'})
+//         .then( user => {
+//             var friendsPosts = _.pluck(user.following, 'posts')
+//             return _.chain(friendsPosts)
+//                             .flatten()
+//                             .sortBy('date')
+//                             .reverse()
             
+//         })
+// }
+
+schema.methods.getFeed = function() {
+    return this.model('User').populate(this, { path: 'following' })
+        .then( (user) => {
+            return Promise.map( user.following, (followedUser) => {
+                return this.model('User').populate(followedUser, {path: 'posts.menuItem'})
+            })
+        }).then( (followedUsers) => {
+            var feed = followedUsers.map( (followedUser) => {
+                return followedUser.posts.map( (post) => { 
+                    post = post.toJSON()
+                    post.user = followedUser.username;
+                    return post;
+                })
+            })
+            return _.chain(feed)
+                    .flatten()
+                    .sortBy('date')
+                    .reverse()
         })
 }
+
+
+
+// populate followedusers
+// add username to their posts
+// pull out the posts into an array
+// populate menu item
+// sort and reverse
 
 schema.methods.getFollowers = function() {
     return this.model('User').find({ following: this._id})

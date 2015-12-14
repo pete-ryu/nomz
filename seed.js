@@ -58,7 +58,7 @@ var seedUsers = function () {
             email: 'andy@andy.com',
             password: 'andy',
             username: 'andy',
-            following: [],
+            following: [1],
             posts: [
                 {
                     imageUrl:  'http://si.wsj.net/public/resources/images/NY-BY632_LUNCHB_P_20121016170840.jpg',
@@ -82,7 +82,7 @@ var seedUsers = function () {
             email: 'peter@peter.com',
             password: 'peter',
             username: 'peter',
-            following: [],
+            following: [1],
             posts: [
                 {
                     imageUrl:  'http://s3-media4.fl.yelpcdn.com/bphoto/ptpOBDdI95DxnbAcgig2WA/348s.jpg',
