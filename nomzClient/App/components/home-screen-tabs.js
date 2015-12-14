@@ -4,6 +4,7 @@ var Button = require('./react-native-button');
 var Play = require('./game-play');
 var Feed = require('./feed');
 var api = require('./utils/api');
+var Home = require('./home-screen-2.js')
 var {
   StyleSheet,
   View,
@@ -65,6 +66,17 @@ var Homescreen = React.createClass({
         initialRoute={{
           title: 'Feed',
           component: Feed,
+          passProps: {user: this.state.user}
+        }} />
+    )
+  },
+
+  renderHome() {
+    return (
+      <NavigatorIOS style={styles.container}
+        initialRoute={{
+          title: 'Nomz!',
+          component: Home,
           passProps: {user: this.state.user}
         }} />
     )
@@ -184,15 +196,7 @@ var Homescreen = React.createClass({
               selected={ this.state.selectedTab === 'nomz'}
               onPress={ () => this.setTab('nomz') }>
  
-                    <View style={styles.container}>
-        <Image source={{ uri: "nomz" , isStatic: true }} style={styles.bgImg} />
-        <View style={{ marginTop: 65, backgroundColor: 'transparent' }}></View>
-          <Button
-            style={styles.btn}
-            onPress={this.playGame}>
-            {"Play Nomz!"}
-          </Button>
-          </View>
+              {this.renderHome()}
 
             </TabBarIOS.Item>
 
