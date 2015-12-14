@@ -1,7 +1,10 @@
 'use strict';
 
-var React = require('react-native');
-const GOOGLE_MAPS_STATIC_API_KEY = 'AIzaSyBxQQR-fISGZgbA0YkjOqEJ4JLfzbaOrKA';
+var React = require('react-native'),
+    ScrollableTabView = require('react-native-scrollable-tab-view'),
+    GoogleStaticMap = require('./GoogleStaticMap'),
+    VenueGallery = require('./VenueGallery'),
+    VenueInfo = require('./VenueInfo')
 
 var {
     StyleSheet,
@@ -10,7 +13,8 @@ var {
     Component,
     Image,
     ListView,
-    TouchableHighlight
+    TouchableHighlight,
+    ScrollView
 } = React;
 
 class GameResultDetails extends Component {
@@ -18,155 +22,47 @@ class GameResultDetails extends Component {
         super(props);
 
         this.state = {
-            rowData: props.rowData
+            venue: props.rowData
         }
-    }
-
-    componentDidMount() {
-        let url = 'http://localhost:1337/api/venue/' + this.state.rowData.id;
-        fetch(url)
-            .then((res) => res.json())
-            .then((resData) => {
-                this.setState({
-                    venueDetails: resData
-                });
-            })
-            .done();
     }
 
     render() {
-
-        if (!this.state.venueDetails) {
-            return this.renderLoadingView();
-        }
-
-        let venueDetails = this.state.venueDetails,
-            venueImage = venueDetails.categories[0].icon.prefix.replace('ss3.4sqi.net', 'foursquare.com') + 'bg_64' + venueDetails.categories[0].icon.suffix,
-            lat = venueDetails.location.lat,
-            lng = venueDetails.location.lng,
-            gmapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=18&size=400x400&markers=color:red%7Clabel:C%7C${lat},${lng}&key=` + GOOGLE_MAPS_STATIC_API_KEY;
-
-        // foursquare api is inconsistent with some of the fields: address, contact, url, etc.
-        // rather than showing undefined, add them only if they actually exists
-        let venAddress = [],
-            venAddlInfo = [];
-
-        let address2 = venueDetails.location.city;
-        if (venueDetails.location.state)
-            address2 += ', ' + venueDetails.location.state;
-
-        if (venueDetails.location.postalCode)
-            address2 += ', ' + venueDetails.location.postalCode;
-
-        venAddress.push(venueDetails.location.address);
-        venAddress.push(address2);
-
-        if (venueDetails.location.crossStreet)
-            venAddlInfo.push(venueDetails.location.crossStreet);
-
-        if (venueDetails.contact.formattedPhone)
-            venAddlInfo.push(venueDetails.contact.formattedPhone);
-
-        if (venueDetails.url)
-            venAddlInfo.push(venueDetails.url);
+        let venue = this.state.venue,
+            gMap = new GoogleStaticMap({
+                xStart: 40.705076,
+                yStart: -74.00916,
+                xEnd: venue.location.lat,
+                yEnd: venue.location.lng
+            }),
+            vGallery = new VenueGallery({ photos: venue.details.photos.groups[0].items.map(e => {
+                return e.prefix + 'width' + 1024 + e.suffix;
+            }) }),
+            vInfo = new VenueInfo(venue);
 
         return (
             <View style={styles.container}>
-                <View style={styles.venueDetailsContainer}>
-                <View style={styles.venueDetails}>
-                    <Text style={styles.venueAddress}>{ venAddress.join('\n') }</Text>
-                    <Text>{ venAddlInfo.join('\n') }</Text>
-                </View>
-               
-                {(() => {
-                    if (venueDetails.bestPhoto)
-                        return (
-                            <Image style={styles.venueMainPhoto} source={{uri: venueDetails.bestPhoto.prefix + 'width' + venueDetails.bestPhoto.width + venueDetails.bestPhoto.suffix }} />
-                        )
-                })()}
-                </View>
-                <View style={styles.venueDetailsContainer}>
-                    <Image style={styles.venueMap} source={{ uri: gmapUrl }} >
-                         <View style={styles.venueDetailsHeader}>
-                            <Text style={styles.venueDetailsHeaderText}>
-                            { venueDetails.name }
-                            </Text>
-                            <Image style={styles.venueImage} source={{uri: venueImage }} />
-                        </View>
-                    </Image>
-                </View>
+                <ScrollableTabView>
+                    <View tabLabel="Venue Info" style={styles.tabContainer}>
+                        { vInfo.view }
+                    </View>
+                    <View tabLabel="Gallery" style={styles.tabContainer}>
+                        { vGallery.view }
+                    </View>
+                    <View tabLabel="Directions" style={styles.tabContainer}>
+                        { gMap.view }
+                    </View>
+                </ScrollableTabView>
             </View>
         )
-    }
-
-    renderLoadingView() {
-        return (
-            <View style={styles.loading}>
-                <Text>
-                  Loading
-                </Text>
-            </View>
-        );
     }
 }
 
 var styles = StyleSheet.create({
-    loading: {
-        flex: 1,
-        justifyContent: 'center',
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
     container: {
-        flex: 1,
-        marginHorizontal: 10,
-        marginTop: 70,
-        alignItems: 'flex-start',
-        flexDirection: 'column'
+        marginTop: 50
     },
-    venueDetailsContainer: {
-        flexDirection: 'column',
-        alignItems: 'center',
-        borderWidth: 1,
-        borderColor: '#D7D7D7',
-        padding: 5
-    },
-    venueDetailsHeader: {
-        alignSelf: 'flex-start',
-        flexDirection: 'row',
-        backgroundColor: 'transparent',
-        marginTop: 70
-    },
-    venueDetailsHeaderText: {
-        fontSize: 15
-    },
-    venueDetails: {
-        flexDirection: 'column',
-        alignSelf: 'flex-start',
-        backgroundColor: 'transparent'
-    },
-    venueMainPhoto: {
-        justifyContent: 'center',
-        width: 345,
-        height: 150,
-        flexDirection: 'row',
-        padding: 5
-    },
-    venueMap: {
-        justifyContent: 'center',
-        width: 345,
-        height: 150,
-        flexDirection: 'row',
-        padding: 5
-    },
-    venueAddress: {
-        fontWeight: 'bold',
-        paddingTop: 5
-    },
-    venueImage: {
-        width: 20,
-        height: 20,
-        alignSelf: 'center',
+    tabContainer: {
+        marginHorizontal: 15
     }
 })
 
