@@ -58,15 +58,6 @@ var Homescreen = React.createClass({
   },
 
 
-  // componentWillReceiveProps(nextProps) {
-  //   console.log('nextProps:', nextProps)
-  //   if (nextProps.user) {
-  //    //  this.setState({
-  //    //      // set something 
-  //    // });
-  //   }
-  // },
-
   playGame() {
     this.props.navigator.push({
       title: 'Review Dishes',
@@ -113,6 +104,7 @@ var Homescreen = React.createClass({
        // update the state to reflect logged out user
        this.props.user = null;
        this.setState({isLoggedIn: false, user: null});
+       this.goToLogin()
      }).done()
   },
 
@@ -179,6 +171,10 @@ var Homescreen = React.createClass({
     )
   }
 });
+
+Homescreen.propTypes = {
+  userId: React.PropTypes.object.isRequired
+}
 
 var styles = StyleSheet.create({
   container: {

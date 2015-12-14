@@ -38,8 +38,8 @@ class Feed extends Component{
   }
 
   componentDidMount() {
-    var id = this.props.user
-    api.fetchFeed(id)
+    var userId = this.props.user._id
+    api.fetchFeed(userId)
       .then( data => {
         // console.log(data)
         if (data.message === 'Not Found') {// Double check server error
@@ -56,14 +56,14 @@ class Feed extends Component{
     }).done();
   }
 
-    componentWillReceiveProps(nextProps) {
-    console.log('nextProps:', nextProps)
-    if (nextProps.user) {
-      this.setState({
-          dataSource: this.state.dataSource.cloneWithRows(nextProps.user)
-     })
-    }
-  }
+  //   componentWillReceiveProps(nextProps) {
+  //   console.log('nextProps:', nextProps)
+  //   if (nextProps.user) {
+  //     this.setState({
+  //         dataSource: this.state.dataSource.cloneWithRows(nextProps.user)
+  //    })
+  //   }
+  // }
 
 
   _endLoading() {
@@ -71,8 +71,8 @@ class Feed extends Component{
   }
 
   _renderPost(data) {
-    console.log(this.props)
-    console.log(data)
+    // console.log(this.props)
+    // console.log(data)
     // return a view with the passed in data
     return (
       <View style={styles.post}>
@@ -105,6 +105,8 @@ class Feed extends Component{
   }
 
   render() {
+    console.log('feed State:', this.state);
+    console.log('feed Props:', this.props)
     return (
       <View style={styles.container}>
         <Image source={{ uri: "nomz" , isStatic: true }} style={styles.bgImg} />
