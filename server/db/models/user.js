@@ -16,6 +16,7 @@ var schema = new mongoose.Schema({
         type: String,
         unique: true
     },
+    userImage: String,
     email: {
         type: String,
         unique: true
@@ -29,7 +30,7 @@ var schema = new mongoose.Schema({
         select: false
     },
     following: {
-        type: [Number],
+        type: [String],
         ref: 'User'
     },
     posts: [{
