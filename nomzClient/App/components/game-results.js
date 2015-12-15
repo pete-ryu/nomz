@@ -58,11 +58,11 @@ class GameResults extends Component {
     renderRow(rowData) {
         // Use first category's image
         // Replace the url from the venue endpoint because it was returning xml instead of actual image
-        var venueImage = rowData.details.bestPhoto.prefix.replace('ss3.4sqi.net', 'foursquare.com') + 'width' + rowData.details.bestPhoto.width + rowData.details.bestPhoto.suffix,
+        var venueImage = rowData.details.bestPhoto.prefix.replace('ss3.4sqi.net', 'foursquare.com') + 'width300' + rowData.details.bestPhoto.suffix,
             venueDistance = rowData.location ? parseFloat((parseInt(rowData.location.distance) * 0.000621371)).toFixed(2) : '(?)';
 
         return (
-            <TouchableHighlight onPress={() => this._onPress(rowData)} underlayColor='#ddd'>
+            <TouchableHighlight onPress={() => this._onPress(rowData)} underlayColor='#fff'>
               <View style={styles.rowContent}>
                 <View style={styles.venueDetails}>
                   <View style={styles.venueDetailsLeft}>
@@ -147,18 +147,32 @@ var styles = StyleSheet.create({
     },
     venueImage: {
         width: 150,
-        height: 150
+        height: 120
     },
     venueHeader: {
         fontWeight: 'bold', 
         color: 'white', 
         fontSize: 20,
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
+        shadowColor: 'black',
+        shadowOffset: {
+            height: 1,
+            width: 1
+        },
+        shadowRadius: 1,
+        shadowOpacity: 0.9
     },
     venueSubheader: {
         fontWeight: 'bold', 
         color: 'white',
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
+        shadowColor: 'black',
+        shadowOffset: {
+            height: 1,
+            width: 1
+        },
+        shadowRadius: 1,
+        shadowOpacity: 0.9
     },
     venueRating: {
         position: 'absolute', 

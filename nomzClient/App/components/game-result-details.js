@@ -35,7 +35,7 @@ class GameResultDetails extends Component {
                 yEnd: venue.location.lng
             }),
             vGallery = new VenueGallery({ photos: venue.details.photos.groups[0].items.map(e => {
-                return e.prefix + 'width' + 1024 + e.suffix;
+                return e.prefix + 'width300' + e.suffix;
             }) }),
             vInfo = new VenueInfo(venue);
 

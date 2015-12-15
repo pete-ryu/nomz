@@ -54,8 +54,8 @@ var styles = StyleSheet.create({
     },
     item: {
         margin: 10,
-        width: 100,
-        height: 100
+        width: deviceWidth / 3,
+        height: deviceWidth / 3
     }
 });
 
