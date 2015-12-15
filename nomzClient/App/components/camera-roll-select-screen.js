@@ -54,7 +54,7 @@ const reactImageProject = React.createClass({
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ user: "VyinUZ04x", image: image })
+        body: JSON.stringify({ user: this.props.user, image: image })
       })
       // .then((res) => res.json())
     });
