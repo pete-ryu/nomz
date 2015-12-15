@@ -26,7 +26,7 @@ class GoogleStaticMap extends Component {
     }
 
     get url() {
-        return `https://maps.googleapis.com/maps/api/staticmap?feature:road&visibility:simplified&path=color:0xff0000ff|weight:3|${this.state.xStart},${this.state.yStart}|${this.state.xEnd},${this.state.yEnd}&center=${this.centerCoordinate.X},${this.centerCoordinate.Y}&zoom=${this.zoomLevel}&size=${deviceWidth}x${deviceHeight}&key=${GOOGLE_MAPS_STATIC_API_KEY}`;
+        return `https://maps.googleapis.com/maps/api/staticmap?markers=color:red%7Clabel:S%7C${this.state.xStart},${this.state.yStart}&markers=color:green%7Clabel:E%7C${this.state.xEnd},${this.state.yEnd}&center=${this.centerCoordinate.X},${this.centerCoordinate.Y}&zoom=${this.zoomLevel}&size=${deviceWidth}x${deviceHeight}&key=${GOOGLE_MAPS_STATIC_API_KEY}`;
     }
 
     get centerCoordinate() {
