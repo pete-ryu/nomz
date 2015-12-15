@@ -128,11 +128,18 @@ var Homescreen = React.createClass({
       )
     } else { // otherwise, render logout button
         authButton = (
+          <View>
           <Button
             style={styles.btn}
             onPress={this.logout}>
             {"Log Out"}
           </Button>
+          <Button
+            style={styles.btn}
+            onPress={this.goToPhotos}>
+            {"Take a photo"}
+          </Button>
+          </View>
       )
     }
     return (
@@ -147,11 +154,6 @@ var Homescreen = React.createClass({
             {"Play Nomz!"}
           </Button>
           { authButton }
-          <Button
-            style={styles.btn}
-            onPress={this.goToPhotos}>
-            {"Take a photo"}
-          </Button>
         </View>
       </View>
     )
