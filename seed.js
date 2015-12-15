@@ -32,6 +32,7 @@ var seedUsers = function () {
             password: 'ian',
             username: 'ian',
             following: [2, 3],
+            userImage: 'https://media.licdn.com/media/AAEAAQAAAAAAAAI3AAAAJDYxODhlZTM3LTYxMWQtNDNlOS05MzUxLTg2Y2JiYTQxYWYyZA.jpg',
             posts: [
 
                 {
@@ -59,6 +60,7 @@ var seedUsers = function () {
             password: 'andy',
             username: 'andy',
             following: [1],
+            userImage: 'https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAANPAAAAJDk4NzI1NDAzLWQ0N2MtNDA4YS1hMGEwLWMwOThhMWY2NTNjZA.jpg',
             posts: [
                 {
                     imageUrl:  'http://si.wsj.net/public/resources/images/NY-BY632_LUNCHB_P_20121016170840.jpg',
@@ -82,6 +84,7 @@ var seedUsers = function () {
             email: 'peter@peter.com',
             password: 'peter',
             username: 'peter',
+            userImage: 'https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAASTAAAAJDk1NTAwNGQ3LTQ2YzYtNGJjMy1hNzA0LTVlNzhhZTFlMzIyOQ.jpg',
             following: [1],
             posts: [
                 {

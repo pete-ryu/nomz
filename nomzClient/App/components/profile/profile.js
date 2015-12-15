@@ -1,8 +1,8 @@
 'use strict';
 var React = require('react-native');
-var Badge = require('./badge');
 var api = require('../utils/api');
-var ParallaxView = require('react-native-parallax-view');
+var Colors = require('../colors');
+
 var {
   Text,
   View,
@@ -16,9 +16,11 @@ var {
 } = React;
 
 var Post = require('../post.js');
+var UserItem = require('./user');
 var { BlurView, VibrancyView} = require('react-native-blur');
 var ScrollableTabView = require('react-native-scrollable-tab-view');
 var deviceWidth = Dimensions.get('window').width;
+var deviceHeight = Dimensions.get('window').height;
 
 class Profile extends Component {
   constructor(props) {
@@ -68,39 +70,64 @@ class Profile extends Component {
       )
     }
 
-    var header = (
+    let header = (
       <View style={styles.header}>
-        <Image style={styles.image} source={ { uri: 'https://avatars3.githubusercontent.com/u/12356761?v=3&s=460'} } />
+        <Image style={styles.image} source={ { uri: this.props.user.userImage} } />
+        <View style={styles.usernameHolder}>
+          <Text style={styles.username}>{this.props.user.username}</Text>
+        </View>
         <View style={styles.headerStats}>
-          <Text>XX Posts</Text> 
-          <Text>XX Followers</Text> 
-          <Text>XX Following</Text>
+          <Text style={styles.stat}><Text style={styles.num}>{this.props.user.posts.length}</Text> Posts</Text> 
+          <Text style={styles.stat}><Text style={styles.num}>{this.props.user.followers.length}</Text> Followers</Text> 
+          <Text style={styles.stat}><Text style={styles.num}>{this.props.user.following.length}</Text> Following</Text>
         </View>
       </View>
     )
 
-    var posts = this.props.user.posts.map( (post, idx) => {
+    let posts = this.props.user.posts.map( (post, idx) => {
       return (
         <View key={idx}>
           <Post postData={post} />
         </View>
       )
     })
+
+    let followers = this.props.user.followers.map( (follower, idx) => {
+      return (
+        <View key={idx}>
+          <UserItem userData={follower} />
+        </View>
+      )
+    })
+
+    let following = this.props.user.followers.map( (following, idx) => {
+      return (
+        <View key={idx}>
+          <UserItem userData={following} />
+        </View>
+      )
+    })
+
+
+
     return (
       <View style={styles.container}>
+        <Image source={{ uri: "nomz" , isStatic: true }} style={styles.bgImg} />
         {header}
-        <ScrollableTabView>
+        <ScrollableTabView
+          tabBarUnderlineColor={Colors.red}
+          tabBarActiveTextColor={Colors.red}
+          >
           <ScrollView tabLabel='Posts' contentContainerStyle={styles.tabView}>
             <View>
               {posts}
             </View>
           </ScrollView>
           <ScrollView tabLabel='Followers' contentContainerStyle={styles.tabView}>
+            {followers}
           </ScrollView>
           <ScrollView tabLabel='Following' contentContainerStyle={styles.tabView}>
-            <View>
-              <Text>My third Tab</Text>
-            </View>
+            {following}
           </ScrollView>
         </ScrollableTabView>
       </View>
@@ -116,19 +143,37 @@ var styles = StyleSheet.create({
     // marginTop: 10
   },
   header: {
-    backgroundColor: 'green',
+    backgroundColor: 'rgba(2, 2, 2, 0.6)',
     marginTop: 30,
     paddingTop: 50,
-    paddingBottom: 30
+    paddingBottom: 20
+  },
+  username: {
+    alignSelf: 'center',
+    marginTop: 10,
+    fontSize: 25,
+    color: 'white'
   },
   headerStats: {
-    backgroundColor: 'blue',
+    // backgroundColor: 'blue',
+    justifyContent: 'space-between',
     flex: 1,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    marginRight: 40,
+    marginLeft: 40,
+    marginTop: 10
   },
-  bottom: {
-    backgroundColor: 'blue',
-    height: 400
+  // bottom: {
+  //   backgroundColor: 'blue',
+  //   height: 400
+  // },
+  stat: {
+    color: 'white',
+    // fontSize: 16
+  },
+  num: {
+    fontSize: 16,
+    color: Colors.pink
   },
   image: {
     height: 125,
@@ -142,10 +187,19 @@ var styles = StyleSheet.create({
   },
   tabView: {
     width: deviceWidth,
+    height: deviceHeight,
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-    // backgroundColor: 'yellow'
+    // justifyContent: 'center',
+    alignItems: 'center',
+    // backgroundColor: 'rgba(2, 2, 2, 0.6)'
+  },
+    bgImg: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    opacity: 0.9
   }
 })
 
