@@ -2,6 +2,7 @@
 var router = require('express').Router();
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
+var Promise = require('bluebird');
 var _ = require('lodash');
 
 // Find requested user by id and store as req.requested user
@@ -34,7 +35,18 @@ router.get('/me', function(req, res) {
 
 // Get another user's profile
 router.get('/:id', function(req, res, next) {
-  res.json(req.requestedUser);
+  // res.json(req.requestedUser);
+  let followersPromise = req.requestedUser.getFollowers()
+  let followingPromise = req.requestedUser.getFollowing()
+  let populatedUser = req.requestedUser.populate('posts.menuItem')
+  Promise.join(populatedUser, followersPromise, followingPromise, 
+    function(user, followers, following) {
+      user = user.toObject();
+      user.followers = followers,
+      user.following = following,
+      res.json(user)
+    }).then(null, next);
+
 })
 
 // Get a user's following

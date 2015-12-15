@@ -15,8 +15,10 @@ var {
 } = React;
 
 var Icon = require('react-native-vector-icons/FontAwesome');
-var myIcon = (<Icon name="spoon" size={30} color="#900" />)
+var myIcon = (<Icon name="spoon" size={30} color="#900" />);
+
 var Separator = require('./helpers/separator');
+var Post = require('./post');
 
 var api = require('./utils/api');
 
@@ -75,32 +77,7 @@ class Feed extends Component{
     // console.log(data)
     // return a view with the passed in data
     return (
-      <View style={styles.post}>
-        <View style={styles.postHeader}>
-          <Text> { data.menuItem.name } </Text>
-            <TouchableHighlight 
-              // style={styles.nomzButton}
-              underlayColor='transparant'>
-              {myIcon}
-            </TouchableHighlight>
-    
-        </View>
-        <View style={styles.imageWrap}>
-          <Image 
-            style={styles.postImage}
-            source={{uri: data.imageUrl}}
-            resizeMode='stretch'
-          />
-        </View>
-        <TouchableHighlight 
-        // style={styles.postUser}
-        underlayColor='transparant'>
-          <Text style={styles.postUser}> {data.user} </Text>
-        </TouchableHighlight>
-        <View>
-          <Text style={styles.caption}> { data.caption } </Text>
-        </View>
-      </View>
+      <Post postData={data} />
     )
   }
 
