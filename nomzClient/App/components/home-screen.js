@@ -173,7 +173,7 @@ var Homescreen = React.createClass({
 });
 
 Homescreen.propTypes = {
-  userId: React.PropTypes.object.isRequired
+  userId: React.PropTypes.string.isRequired
 }
 
 var styles = StyleSheet.create({
