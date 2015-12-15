@@ -44,7 +44,7 @@ class GameResultDetails extends Component {
         return (
             <View style={styles.container}>
                 <ScrollableTabView>
-                    <View tabLabel="Venue Info" style={styles.tabContainer}>
+                    <View tabLabel="Info" style={styles.tabContainer}>
                         { vInfo.view }
                     </View>
                     <View tabLabel="Gallery" style={styles.tabContainer}>

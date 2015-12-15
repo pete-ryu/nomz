@@ -67,7 +67,7 @@ class GameResults extends Component {
                 <View style={styles.venueDetails}>
                   <View style={styles.venueDetailsLeft}>
                     <Text style={ styles.venueRating } >
-                        { rowData.details.rating }
+                        { rowData.details.rating.toFixed(1) }
                     </Text>
                     <Text style={ styles.venueHeader }>
                       { rowData.name }

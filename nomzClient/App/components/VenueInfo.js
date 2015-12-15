@@ -7,7 +7,8 @@ var React = require('react-native'),
         StyleSheet,
         Text,
         View,
-        Image
+        Image,
+        LinkingIOS
     } = React,
     deviceWidth = Dimensions.get('window').width,
     deviceHeight = Dimensions.get('window').height;
@@ -26,11 +27,12 @@ class VenueInfo extends Component {
             icon: props.categories[0].icon.prefix.replace('ss3.4sqi.net', 'foursquare.com') + 'bg_64' + props.categories[0].icon.suffix,
             checkinsCount: props.stats.checkinsCount,
             usersCount: props.stats.usersCount,
-            phone: props.details.contact.formattedPhone,
+            phone: props.details.contact.formattedPhone ? props.details.contact.formattedPhone : 'Phone Unavailable',
             tips: props.tips ? props.tips.groups : [],
             photo: props.details.bestPhoto.prefix.replace('ss3.4sqi.net', 'foursquare.com') + 'width' + deviceWidth + props.details.bestPhoto.suffix,
             url: props.details.url,
-            hours: props.details.hours
+            hours: props.details.hours,
+            delivery: props.details.delivery
         }
     }
 
@@ -50,12 +52,6 @@ class VenueInfo extends Component {
         venAddress.push(this.state.address);
         venAddress.push(address2);
 
-        if (this.state.phone)
-            venAddlInfo.push(this.state.phone);
-
-        if (this.state.url)
-            venAddlInfo.push(this.state.url);
-
         return (
             <View style={styles.container}>
                 <View style={{ marginTop: 10 }}>
@@ -70,16 +66,16 @@ class VenueInfo extends Component {
                             </View>
                         </View>
                         <View style={styles.descriptionBox}>
-                            <Text style={styles.description}>{venAddress.join('\n') }</Text>
+                            <Text style={[styles.description, { textAlign: 'center' }]}>{venAddress.join('\n')}</Text>
                         </View>
                         <View style={styles.descriptionBox}>
                             <Text style={styles.description}>{ this.state.phone }</Text>
                         </View>
                         <View style={styles.descriptionBox}>
-                            <Text style={styles.description}>{this.state.url}</Text>
+                            <Text style={styles.description}>{ (this.state.hours.isOpen ? 'Open Now' : 'Closed Now') + ' - ' + this.state.hours.status }</Text>
                         </View>
                         <View style={styles.descriptionBox}>
-                            <Text style={styles.description}>{ (this.state.hours.isOpen ? 'OPEN NOW' : 'CLOSED NOW') + ' - ' + this.state.hours.status }</Text>
+                            <Text style={styles.description} onPress={() => LinkingIOS.openURL(this.state.delivery.url)}>{ (this.state.delivery ? 'ORDER NOW' : '' ) }</Text>
                         </View>
                     </View>
                 </View>
@@ -104,7 +100,7 @@ var styles = StyleSheet.create({
     banner: {
         flex: 1,
         flexDirection: 'column',
-        height: deviceHeight / 4, 
+        height: deviceHeight / 4,
         width: deviceWidth,
         justifyContent: 'center',
         alignItems: 'center',
@@ -135,17 +131,17 @@ var styles = StyleSheet.create({
         justifyContent: 'center'
     },
     statBoxText: {
-      fontFamily: 'Arial',
-      color: 'white',
-      fontWeight: 'bold',
-      shadowColor: 'black',
-      shadowOffset: {
-        height: 1,
-        width: 1
-      },
-      shadowRadius: 1,
-      shadowOpacity: 0.9,
-      backgroundColor: 'transparent'
+        fontFamily: 'Arial',
+        color: 'white',
+        fontWeight: 'bold',
+        shadowColor: 'black',
+        shadowOffset: {
+            height: 1,
+            width: 1
+        },
+        shadowRadius: 1,
+        shadowOpacity: 0.9,
+        backgroundColor: 'transparent'
     },
     descriptionBox: {
         flex: 1,
@@ -159,7 +155,7 @@ var styles = StyleSheet.create({
         borderBottomWidth: 1,
     },
     description: {
-        color: 'white', 
+        color: 'white',
         fontSize: 15
     }
 });
