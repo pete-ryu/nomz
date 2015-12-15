@@ -8,6 +8,7 @@ var React = require('react-native');
 // var Game = require('./App/components/game-play');
 // var Home = require('./App/components/home-screen');
 var Auth = require('./App/components/Auth/auth');
+var Colors = require('./App/components/colors');
 var {
   AppRegistry,
   StyleSheet,
@@ -59,6 +60,9 @@ class nomzClient extends Component{
         <NavigatorIOS
           ref = "nav"
           style={styles.container}
+          barTintColor={Colors.red} 
+          tintColor='white'
+          titleTextColor='white'
           initialRoute = {{
             title: 'Nomz!',
             backButtonTitle: ' ',
