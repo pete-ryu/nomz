@@ -22,15 +22,17 @@ class GameResultDetails extends Component {
         super(props);
 
         this.state = {
-            venue: props.rowData
+            venue: props.rowData,
+            lat: props.lat,
+            long: props.long
         }
     }
 
     render() {
         let venue = this.state.venue,
             gMap = new GoogleStaticMap({
-                xStart: 40.705076,
-                yStart: -74.00916,
+                xStart: this.state.lat,
+                yStart: this.state.long,
                 xEnd: venue.location.lat,
                 yEnd: venue.location.lng
             }),

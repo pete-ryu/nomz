@@ -103,7 +103,9 @@ class GameResults extends Component {
             component: GameResultDetails,
             title: rowData.name,
             passProps: {
-                rowData: rowData
+                rowData: rowData,
+                lat: this.state.lat,
+                long: this.state.long
             }
         });
     }
