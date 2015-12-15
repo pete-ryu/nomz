@@ -17,7 +17,6 @@ var api = {
     };
     return fetch(LOGIN_URL, config).then( (res) => {
       if (res.status !== 200) {
-        console.log(res)
         // If no 200, then just throw an error to reject the promise
         let err = new Error(res);
         err.message = 'Bad Login'
@@ -38,7 +37,6 @@ var api = {
   fetchUser(id) {
     const USER_URL = `http://localhost:1337/api/users/${id}`;
     return fetch(USER_URL).then( (res) => {
-      console.log('in api/fetchUser, res:', res)
       if (res.status !== 200) {
         throw new Error(res)
       } else {

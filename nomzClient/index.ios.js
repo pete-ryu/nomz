@@ -1,12 +1,6 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
 'use strict';
 
 var React = require('react-native');
-// var Game = require('./App/components/game-play');
-// var Home = require('./App/components/home-screen');
 var Auth = require('./App/components/Auth/auth');
 var Colors = require('./App/components/colors');
 var {
@@ -30,16 +24,14 @@ class nomzClient extends Component{
     }
   }
 
-
+  // On application launched, check if a user 's id is stored
   componentWillMount() {
     AsyncStorage.getItem('userId').then( val => {
       if (!val) {
         this.setState({
           isLoading: false,
         })
-        // console.log('No User Session');
       } else {
-        // console.log('Initial fetch from storage in index:', val)
         this.setState({
           isLoading: false,
           user: val,
@@ -72,7 +64,6 @@ class nomzClient extends Component{
           }} />
       )
     } else {
-      // TODO: Maybe update to an activity indicator...
       homepage = (<ActivityIndicatorIOS
                     animating={this.state.isLoading}
                     style={styles.centered}

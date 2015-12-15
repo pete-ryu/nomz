@@ -36,7 +36,7 @@ var seedUsers = function () {
             posts: [
 
                 {
-                    imageUrl:  'https://www.hamptoncreek.com/img/p-just-cookies/panel-cookie-choc-cookie.png',
+                    imageUrl:  'http://www.nutritionistinthekitch.com/wp-content/uploads/2012/11/IMGP5330.jpg',
                     date: new Date(2014, 1, 2),
                     caption: 'here is a caption for ians post', 
                     menuItem: '119285'

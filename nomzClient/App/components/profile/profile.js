@@ -12,7 +12,9 @@ var {
   SegmentedControlIOS,
   ListView,
   ScrollView,
-  Dimensions
+  Dimensions,
+  TouchableOpacity,
+  NavigatorIOS
 } = React;
 
 var Post = require('../post.js');
@@ -55,11 +57,21 @@ class Profile extends Component {
       })
   }
 
+  _onUserItemPress(userData) {
+    this.props.navigator.push({
+      component: this,
+      passProps: {
+        user: userData
+      }
+    })
+  }
+
+
   render() {
     // var user = this.state.user || null
 
-    console.log('in Profile. State:', this.state);
-    console.log('in Profile. Props:', this.props);
+    // console.log('in Profile. State:', this.state);
+    // console.log('in Profile. Props:', this.props);
     if (!this.props.user) {
       return (
              <View style={styles.loading}>
@@ -95,7 +107,9 @@ class Profile extends Component {
     let followers = this.props.user.followers.map( (follower, idx) => {
       return (
         <View key={idx}>
-          <UserItem userData={follower} />
+          <TouchableOpacity onPress={() => this._onUserItemPress(follower)}>
+            <UserItem userData={follower} />
+          </TouchableOpacity>
         </View>
       )
     })
@@ -115,7 +129,7 @@ class Profile extends Component {
         <Image source={{ uri: "nomz" , isStatic: true }} style={styles.bgImg} />
         {header}
         <ScrollableTabView
-          tabBarUnderlineColor={Colors.red}
+          tabBarUnderlineColor={"red"}
           tabBarActiveTextColor={Colors.red}
           >
           <ScrollView tabLabel='Posts' contentContainerStyle={styles.tabView}>
@@ -191,6 +205,7 @@ var styles = StyleSheet.create({
     flex: 1,
     // justifyContent: 'center',
     alignItems: 'center',
+    // backgroundColor: 'black'
     // backgroundColor: 'rgba(2, 2, 2, 0.6)'
   },
     bgImg: {

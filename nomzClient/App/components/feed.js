@@ -39,6 +39,7 @@ class Feed extends Component{
 
   }
 
+  // On mount, fetch the users feed
   componentDidMount() {
     var userId = this.props.user._id
     api.fetchFeed(userId)
@@ -58,23 +59,12 @@ class Feed extends Component{
     }).done();
   }
 
-  //   componentWillReceiveProps(nextProps) {
-  //   console.log('nextProps:', nextProps)
-  //   if (nextProps.user) {
-  //     this.setState({
-  //         dataSource: this.state.dataSource.cloneWithRows(nextProps.user)
-  //    })
-  //   }
-  // }
-
 
   _endLoading() {
     this.state.isLoading = false
   }
 
   _renderPost(data) {
-    // console.log(this.props)
-    // console.log(data)
     // return a view with the passed in data
     return (
       <Post postData={data} />
@@ -82,8 +72,6 @@ class Feed extends Component{
   }
 
   render() {
-    console.log('feed State:', this.state);
-    console.log('feed Props:', this.props)
     return (
       <View style={styles.container}>
         <Image source={{ uri: "nomz" , isStatic: true }} style={styles.bgImg} />
@@ -139,9 +127,6 @@ var styles = StyleSheet.create({
     // height: 250,
     flex: 1
   },
-  // postUser: {
-  //   marginTop: 15
-  // },
   postUser: {
     marginTop: 10,
     // color: 'purple'

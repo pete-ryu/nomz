@@ -24,24 +24,8 @@ var Homescreen = React.createClass({
     }
   },
 
-  // On mount, check for user in Async Storage and update state accordingly
-  // componentWillMount() {
-  //   AsyncStorage.getItem('userId').then( val => {
-  //     if (!val) {
-  //       this.setState({
-  //         isLoading: false,
-  //         isLoggedIn: false
-  //       })
-  //     } else {
-  //       this.setState({
-  //         isLoading: false,
-  //         isLoggedIn: true,
-  //         user: val
-  //       })
-  //     }
-  //   })
-  // },
-
+  // on mount, fetch the user from the id passed in the props
+  // this id gets passed from Async Storage at the index or Auth component
   componentWillMount() {
     console.log('mounting component...')
     let userId = this.props.userId;
@@ -95,9 +79,11 @@ var Homescreen = React.createClass({
   },
 
   logout() {
-    // send logout request
+    // send logout request 
+    // TO DO: Better error handling
     api.logout().then( res => {
       if (res.status === 200) {
+        // remove user id from storage
         return AsyncStorage.removeItem('userId')
       }
     }).then( () => {
@@ -109,8 +95,6 @@ var Homescreen = React.createClass({
   },
 
   render() {
-    console.log('homepage Props:', this.props)
-    console.log('homepage State:', this.state)
     var authButton;
     var feedButton;
     var profileButton;
@@ -163,9 +147,9 @@ var Homescreen = React.createClass({
             onPress={this.playGame}>
             {"Play Nomz!"}
           </Button>
-          { authButton }
           { feedButton }
           { profileButton }
+          { authButton }
         </View>
       </View>
     )

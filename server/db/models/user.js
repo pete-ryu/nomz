@@ -7,7 +7,7 @@ var _ = require('lodash');
 var Promise = require('bluebird');
 
 var schema = new mongoose.Schema({
-    _id: { // Foursquare Token
+    _id: { 
         type: String,
         unique: true,
         default: shortId.generate
