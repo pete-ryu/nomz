@@ -24,7 +24,10 @@ var color = {
   secondary2_1 : '#FFEB9E',
   secondary2_2 : '#FFDE5B',
   secondary2_3 : '#C39C01',
-  secondary2_4 : '#8A6E00'
+  secondary2_4 : '#8A6E00',
+
+  pink : '#df6260',
+  red : '#900'
 }
 
 module.exports = color;

@@ -4,7 +4,7 @@ var React = require("react-native");
 var api = require('../utils/api');
 var Button = require('../react-native-button');
 var Home = require('../home-screen');
-
+var Colors = require('../colors')
 
 var {
     Component,
@@ -64,7 +64,7 @@ class LoginView extends Component {
 
     render() {
         var showErr = (
-          this.state.error ? <Text> {this.state.error} </Text> : <View></View>
+          this.state.error ? <Text style={styles.error}> {this.state.error} </Text> : <View></View>
         );
 
         var userIcon = (<Icon name="user" size={20} style={styles.icon} />)
@@ -78,6 +78,7 @@ class LoginView extends Component {
                             {userIcon}
                             <TextInput
                                 placeholder="Email"
+                                placeholderTextColor='white'
                                 onChange={(event) => this.setState({email: event.nativeEvent.text})}
                                 style={styles.formInput}
                                 value={this.state.email} />
@@ -86,18 +87,22 @@ class LoginView extends Component {
                             {passIcon}
                             <TextInput
                                 placeholder="Password"
+                                placeholderTextColor='white'
                                 secureTextEntry={true}
                                 onChange={(event) => this.setState({password: event.nativeEvent.text})}
                                 style={styles.formInput}
                                 value={this.state.password} />
                         </View>
                     </View>
+                    { showErr }
                     <Button
                         style={styles.btn}
                         onPress={this.onSubmitPressed.bind(this)} >
                         {"Login"}
                     </Button>
-                    { showErr }
+                    <View style={styles.subTextContainer}>
+                        <Text style={styles.subText}> Not a member? <Text style={styles.link}>Sign Up!</Text> </Text>
+                    </View>
                 </View>
             </View>
         );
@@ -135,17 +140,20 @@ var styles = StyleSheet.create({
         marginTop: 5,
         flex: 1,
         fontSize: 18,
-        backgroundColor: 'rgba(255, 255, 255, 0.6)',
-        color: "#555555"
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        // color: "#555555",
+        color: 'white',
+        // opacity: .2
     },
     icon: {
-        color: '#555',
+        // color: '#555',
+        color: 'white',
         height: 36,
         paddingLeft: 10,
         paddingTop: 7,
         marginTop: 5,
         backgroundColor: 'white',
-        backgroundColor: 'rgba(255, 255, 255, 0.6)',
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
         borderTopLeftRadius: 5,
         borderBottomLeftRadius: 5
     },
@@ -155,10 +163,10 @@ var styles = StyleSheet.create({
       fontSize: 20,
       color: 'white',
       padding: 10,
-      marginBottom: 20,
+      marginBottom: 10,
       marginTop: 20,
       borderColor: '#df6260',
-      backgroundColor: '#df6260'
+      backgroundColor: Colors.red
     },
     button: {
         height: 36,
@@ -182,6 +190,20 @@ var styles = StyleSheet.create({
         left: 0,
         right: 0,
         opacity: 0.9
+  },
+  subTextContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  subText: {
+    color: 'white',
+  },
+  link: {
+    color: Colors.pink
+  },
+  error: {
+    color: 'red'
   }
 });
 
