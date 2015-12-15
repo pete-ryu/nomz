@@ -156,6 +156,7 @@ var Homescreen = React.createClass({
 
     } else { // otherwise, render logout button
         authButton = (
+          <View>
           <Button
             style={styles.btn}
             onPress={this.logout}>
@@ -177,6 +178,12 @@ var Homescreen = React.createClass({
           onPress={this.goToProfile}>
           {'Profile'}
         </Button>
+          <Button
+            style={styles.btn}
+            onPress={this.goToPhotos}>
+            {"Take a photo"}
+          </Button>
+          </View>
       )
 
     }
@@ -194,11 +201,6 @@ var Homescreen = React.createClass({
           { feedButton }
           { profileButton }
           { authButton }
-          <Button
-            style={styles.btn}
-            onPress={this.goToPhotos}>
-            {"Take a photo"}
-          </Button>
         </View>
       </View>
     )
