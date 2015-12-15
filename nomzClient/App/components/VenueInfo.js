@@ -29,7 +29,8 @@ class VenueInfo extends Component {
             phone: props.details.contact.formattedPhone,
             tips: props.tips ? props.tips.groups : [],
             photo: props.details.bestPhoto.prefix.replace('ss3.4sqi.net', 'foursquare.com') + 'width' + deviceWidth + props.details.bestPhoto.suffix,
-            url: props.details.url
+            url: props.details.url,
+            hours: props.details.hours
         }
     }
 
@@ -76,6 +77,9 @@ class VenueInfo extends Component {
                         </View>
                         <View style={styles.descriptionBox}>
                             <Text style={styles.description}>{this.state.url}</Text>
+                        </View>
+                        <View style={styles.descriptionBox}>
+                            <Text style={styles.description}>{ (this.state.hours.isOpen ? 'OPEN NOW' : 'CLOSED NOW') + ' - ' + this.state.hours.status }</Text>
                         </View>
                     </View>
                 </View>
