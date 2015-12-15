@@ -90,7 +90,8 @@ var Homescreen = React.createClass({
     this.props.navigator.push({
       title: 'Post a Pic',
       component: Camera,
-      backButtonTitle: ' '
+      backButtonTitle: ' ',
+      passProps: { user: this.props.user }
     });
   },
 
@@ -98,7 +99,8 @@ var Homescreen = React.createClass({
     this.props.navigator.push({
       title: 'Post a Pic',
       component: PhotoUpload,
-      backButtonTitle: ' '
+      backButtonTitle: ' ',
+      passProps: { user: this.props.user }
     });
   },
 
