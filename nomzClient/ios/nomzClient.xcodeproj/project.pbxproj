@@ -24,6 +24,9 @@
 		6903A1AD1C1A0F4400B64C01 /* libRCTCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6903A1AC1C1A0ED800B64C01 /* libRCTCamera.a */; };
 		690C2F651C1A17EA005787CF /* react-native-camera in Resources */ = {isa = PBXBuildFile; fileRef = 690C2F641C1A17EA005787CF /* react-native-camera */; };
 		69C799361C1E699300BEFC30 /* nomzClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* nomzClientTests.m */; };
+		69CDDCD01C20F77F00E2AA07 /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = 69CDDCCF1C20F77F00E2AA07 /* Fonts */; };
+		69CDDCDE1C20F87E00E2AA07 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69CDDCDD1C20F87E00E2AA07 /* FontAwesome.ttf */; };
+		69CDDCE01C20F88400E2AA07 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69CDDCDF1C20F88400E2AA07 /* MaterialIcons.ttf */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 /* End PBXBuildFile section */
 
@@ -144,6 +147,9 @@
 		6903A1801C19E9AF00B64C01 /* RCTCameraRoll.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTCameraRoll.xcodeproj; path = "../../node_modules/react-native/Libraries/CameraRoll/RCTCameraRoll.xcodeproj"; sourceTree = "<group>"; };
 		6903A1A71C1A0ED700B64C01 /* RCTCamera.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTCamera.xcodeproj; path = "../../node_modules/react-native-camera/ios/RCTCamera.xcodeproj"; sourceTree = "<group>"; };
 		690C2F641C1A17EA005787CF /* react-native-camera */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "react-native-camera"; path = "/Users/ajs/dev/fullstack/nomz/node_modules/react-native-camera"; sourceTree = "<absolute>"; };
+		69CDDCCF1C20F77F00E2AA07 /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fonts; path = "../node_modules/react-native-vector-icons/Fonts"; sourceTree = "<group>"; };
+		69CDDCDD1C20F87E00E2AA07 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
+		69CDDCDF1C20F88400E2AA07 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -254,6 +260,7 @@
 		13B07FAE1A68108700A75B9A /* nomzClient */ = {
 			isa = PBXGroup;
 			children = (
+				69CDDCCF1C20F77F00E2AA07 /* Fonts */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -327,6 +334,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				69CDDCDF1C20F88400E2AA07 /* MaterialIcons.ttf */,
+				69CDDCDD1C20F87E00E2AA07 /* FontAwesome.ttf */,
 				13B07FAE1A68108700A75B9A /* nomzClient */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* nomzClientTests */,
@@ -570,6 +579,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69CDDCE01C20F88400E2AA07 /* MaterialIcons.ttf in Resources */,
+				69CDDCDE1C20F87E00E2AA07 /* FontAwesome.ttf in Resources */,
+				69CDDCD01C20F77F00E2AA07 /* Fonts in Resources */,
 				690C2F651C1A17EA005787CF /* react-native-camera in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,

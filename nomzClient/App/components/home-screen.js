@@ -112,7 +112,7 @@ var Homescreen = React.createClass({
       title: 'Post a Pic',
       component: Camera,
       backButtonTitle: ' ',
-      passProps: { user: this.props.user }
+      passProps: { user: this.state.user._id }
     });
   },
 
@@ -121,7 +121,7 @@ var Homescreen = React.createClass({
       title: 'Post a Pic',
       component: PhotoUpload,
       backButtonTitle: ' ',
-      passProps: { user: this.props.user }
+      passProps: { user: this.state.user._id }
     });
   },
 
@@ -137,11 +137,13 @@ var Homescreen = React.createClass({
   },
 
   render() {
-    console.log('homepage Props:', this.props)
-    console.log('homepage State:', this.state)
+    // console.log('user Props:', this.props.user)
+    // console.log('homepage Props:', this.props)
+    // console.log('homepage State:', this.state)
     var authButton;
     var feedButton;
     var profileButton;
+    var cameraButton;
     // if user logged in (according to state, render login button)
     if (!this.state.isLoggedIn) {
       authButton = (
@@ -153,17 +155,16 @@ var Homescreen = React.createClass({
       );
       feedButton = <View></View>
       profileButton = <View></View>
+      cameraButton = <View></View>
 
     } else { // otherwise, render logout button
         authButton = (
-          <View>
           <Button
             style={styles.btn}
             onPress={this.logout}>
             {"Log Out"}
           </Button>
       ),
-        // feedButton = <View></View>
       feedButton = (
         <Button
           style={styles.btn}
@@ -178,12 +179,14 @@ var Homescreen = React.createClass({
           onPress={this.goToProfile}>
           {'Profile'}
         </Button>
-          <Button
-            style={styles.btn}
-            onPress={this.goToPhotos}>
-            {"Take a photo"}
-          </Button>
-          </View>
+      ),
+
+      cameraButton = (
+        <Button
+          style={styles.btn}
+          onPress={this.goToPhotos}>
+          {"Take a photo"}
+        </Button>
       )
 
     }
@@ -200,6 +203,7 @@ var Homescreen = React.createClass({
           </Button>
           { feedButton }
           { profileButton }
+          { cameraButton }
           { authButton }
         </View>
       </View>
