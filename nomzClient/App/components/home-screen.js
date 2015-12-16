@@ -4,6 +4,8 @@ var Button = require('./react-native-button');
 var Play = require('./game-play');
 var Feed = require('./feed');
 var api = require('./utils/api');
+var PhotoUpload = require('./camera-roll-select-screen');
+
 var {
   StyleSheet,
   View,
@@ -42,6 +44,15 @@ var Homescreen = React.createClass({
   },
 
 
+  // componentWillReceiveProps(nextProps) {
+  //   console.log('nextProps:', nextProps)
+  //   if (nextProps.user) {
+  //    //  this.setState({
+  //    //      // set something
+  //    // });
+  //   }
+  // },
+
   playGame() {
     this.props.navigator.push({
       title: 'Review Dishes',
@@ -79,7 +90,7 @@ var Homescreen = React.createClass({
   },
 
   logout() {
-    // send logout request 
+    // send logout request
     // TO DO: Better error handling
     api.logout().then( res => {
       if (res.status === 200) {
@@ -92,6 +103,14 @@ var Homescreen = React.createClass({
        this.setState({isLoggedIn: false, user: null});
        this.goToLogin()
      }).done()
+  },
+
+  takePhoto() {
+    this.props.navigator.push({
+      title: 'Post a Pic',
+      component: PhotoUpload,
+      backButtonTitle: ' '
+    });
   },
 
   render() {
@@ -152,6 +171,11 @@ var Homescreen = React.createClass({
           { feedButton }
           { profileButton }
           { authButton }
+          <Button
+            style={styles.btn}
+            onPress={this.takePhoto}>
+            {"Take a photo"}
+          </Button>
         </View>
       </View>
     )
