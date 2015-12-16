@@ -5,12 +5,14 @@ var Play = require('./game-play');
 var Feed = require('./feed');
 var api = require('./utils/api');
 var PhotoUpload = require('./camera-roll-select-screen');
+var Camera = require('./camera-app');
 
 var {
   StyleSheet,
   View,
   Text,
   Image,
+  AlertIOS,
   NavigatorIOS,
   TouchableOpacity,
   AsyncStorage
@@ -108,9 +110,28 @@ var Homescreen = React.createClass({
   takePhoto() {
     this.props.navigator.push({
       title: 'Post a Pic',
+      component: Camera,
+      backButtonTitle: ' '
+    });
+  },
+
+  photoFromRoll() {
+    this.props.navigator.push({
+      title: 'Post a Pic',
       component: PhotoUpload,
       backButtonTitle: ' '
     });
+  },
+
+  goToPhotos() {
+    AlertIOS.alert(
+      'Upload Image',
+      'Upload image from...',
+      [
+        {text: 'Camera Roll', onPress: () => this.photoFromRoll()},
+        {text: 'Take Photo', onPress: () => this.takePhoto()},
+      ]
+    )
   },
 
   render() {
@@ -173,7 +194,7 @@ var Homescreen = React.createClass({
           { authButton }
           <Button
             style={styles.btn}
-            onPress={this.takePhoto}>
+            onPress={this.goToPhotos}>
             {"Take a photo"}
           </Button>
         </View>
