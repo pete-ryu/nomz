@@ -65,10 +65,7 @@ class nomzClient extends Component{
           }} />
       )
     } else {
-<<<<<<< HEAD
-=======
-      // TODO: Maybe update to an activity indicator...
->>>>>>> 87612cf9d5d1f4fe1580249ffba9649a4a4837ef
+
       homepage = (<ActivityIndicatorIOS
                     animating={this.state.isLoading}
                     style={styles.centered}

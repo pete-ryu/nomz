@@ -57,6 +57,19 @@ class Profile extends Component {
       })
   }
 
+  _onUserItemPress(user) {
+    this.setState({isLoading: true})
+    api.fetchUser(user._id)
+      .then( (data) => {
+        this.setState({isLoading: false});
+        this.props.navigator.push({
+          component: Profile,
+          passProps: { user: user }
+        })
+      })
+
+  }
+ 
 
   render() {
     // var user = this.state.user || null

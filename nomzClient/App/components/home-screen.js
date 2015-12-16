@@ -152,8 +152,6 @@ var Homescreen = React.createClass({
           { feedButton }
           { profileButton }
           { authButton }
-          { feedButton }
-          { profileButton }
         </View>
       </View>
     )
