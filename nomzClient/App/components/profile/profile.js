@@ -19,7 +19,6 @@ var {
 
 var Post = require('../post.js');
 var UserItem = require('./user');
-var { BlurView, VibrancyView} = require('react-native-blur');
 var ScrollableTabView = require('react-native-scrollable-tab-view');
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
@@ -69,7 +68,7 @@ class Profile extends Component {
       })
 
   }
- 
+
 
   render() {
     // var user = this.state.user || null
@@ -90,8 +89,8 @@ class Profile extends Component {
           <Text style={styles.username}>{this.props.user.username}</Text>
         </View>
         <View style={styles.headerStats}>
-          <Text style={styles.stat}><Text style={styles.num}>{this.props.user.posts.length}</Text> Posts</Text> 
-          <Text style={styles.stat}><Text style={styles.num}>{this.props.user.followers.length}</Text> Followers</Text> 
+          <Text style={styles.stat}><Text style={styles.num}>{this.props.user.posts.length}</Text> Posts</Text>
+          <Text style={styles.stat}><Text style={styles.num}>{this.props.user.followers.length}</Text> Followers</Text>
           <Text style={styles.stat}><Text style={styles.num}>{this.props.user.following.length}</Text> Following</Text>
         </View>
       </View>
