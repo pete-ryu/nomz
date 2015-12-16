@@ -32,10 +32,11 @@ var seedUsers = function () {
             password: 'ian',
             username: 'ian',
             following: [2, 3],
+            userImage: 'https://media.licdn.com/media/AAEAAQAAAAAAAAI3AAAAJDYxODhlZTM3LTYxMWQtNDNlOS05MzUxLTg2Y2JiYTQxYWYyZA.jpg',
             posts: [
 
                 {
-                    imageUrl:  'https://www.hamptoncreek.com/img/p-just-cookies/panel-cookie-choc-cookie.png',
+                    imageUrl:  'http://www.nutritionistinthekitch.com/wp-content/uploads/2012/11/IMGP5330.jpg',
                     date: new Date(2014, 1, 2),
                     caption: 'here is a caption for ians post', 
                     menuItem: '119285'
@@ -58,7 +59,8 @@ var seedUsers = function () {
             email: 'andy@andy.com',
             password: 'andy',
             username: 'andy',
-            following: [],
+            following: [1],
+            userImage: 'https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAANPAAAAJDk4NzI1NDAzLWQ0N2MtNDA4YS1hMGEwLWMwOThhMWY2NTNjZA.jpg',
             posts: [
                 {
                     imageUrl:  'http://si.wsj.net/public/resources/images/NY-BY632_LUNCHB_P_20121016170840.jpg',
@@ -82,7 +84,8 @@ var seedUsers = function () {
             email: 'peter@peter.com',
             password: 'peter',
             username: 'peter',
-            following: [],
+            userImage: 'https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAASTAAAAJDk1NTAwNGQ3LTQ2YzYtNGJjMy1hNzA0LTVlNzhhZTFlMzIyOQ.jpg',
+            following: [1],
             posts: [
                 {
                     imageUrl:  'http://s3-media4.fl.yelpcdn.com/bphoto/ptpOBDdI95DxnbAcgig2WA/348s.jpg',

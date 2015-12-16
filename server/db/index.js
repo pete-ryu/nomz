@@ -3,7 +3,6 @@ var Promise = require('bluebird');
 var chalk = require('chalk');
 
 var DATABASE_URI = process.env.MONGOURI;
-
 var mongoose = require('mongoose');
 var db = mongoose.connect(DATABASE_URI).connection;
 

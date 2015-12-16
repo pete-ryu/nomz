@@ -1,13 +1,8 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
 'use strict';
 
 var React = require('react-native');
-// var Game = require('./App/components/game-play');
-// var Home = require('./App/components/home-screen');
 var Auth = require('./App/components/Auth/auth');
+var Colors = require('./App/components/colors');
 var {
   AppRegistry,
   StyleSheet,
@@ -15,7 +10,8 @@ var {
   View,
   Component,
   NavigatorIOS,
-  AsyncStorage
+  AsyncStorage,
+  ActivityIndicatorIOS
 } = React;
 
 class nomzClient extends Component{
@@ -28,15 +24,15 @@ class nomzClient extends Component{
     }
   }
 
-
+  // On application launched, check if a user 's id is stored
   componentWillMount() {
     AsyncStorage.getItem('userId').then( val => {
       if (!val) {
         this.setState({
           isLoading: false,
         })
+        // console.log('No User Session');
       } else {
-        console.log('fetched from storage:', val)
         this.setState({
           isLoading: false,
           user: val,
@@ -51,23 +47,30 @@ class nomzClient extends Component{
     // console.log('in index, state.user:', this.state)
     var homepage;
     // confirm whether user is logged in based on state and select next view accordingly
-    // var nextRoute = this.state.isLoggedIn ? require('./App/components/home-screen') : Auth
+    var nextRoute = this.state.isLoggedIn ? require('./App/components/home-screen') : Auth
     if (!this.state.isLoading) {
          homepage = (
         <NavigatorIOS
           ref = "nav"
           style={styles.container}
+          barTintColor={Colors.red} 
+          tintColor='white'
+          titleTextColor='white'
           initialRoute = {{
             title: 'Nomz!',
             backButtonTitle: ' ',
             description: 'Nomz! - the best new way to find food',
-            component: require('./App/components/home-screen'),
-            passProps: { user: this.state.user }
+            component: nextRoute,
+            passProps: { userId: this.state.user }
           }} />
       )
     } else {
-      // TODO: Maybe update to an activity indicator...
-      homepage = <View></View>
+
+      homepage = (<ActivityIndicatorIOS
+                    animating={this.state.isLoading}
+                    style={styles.centered}
+                    size='large'/>
+                )
     }
  
 
@@ -78,7 +81,11 @@ class nomzClient extends Component{
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-  }
+  },
+  centered: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
 
 AppRegistry.registerComponent('nomzClient', () => nomzClient);

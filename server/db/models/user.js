@@ -7,7 +7,7 @@ var _ = require('lodash');
 var Promise = require('bluebird');
 
 var schema = new mongoose.Schema({
-    _id: { // Foursquare Token
+    _id: { 
         type: String,
         unique: true,
         default: shortId.generate
@@ -16,6 +16,7 @@ var schema = new mongoose.Schema({
         type: String,
         unique: true
     },
+    userImage: String,
     email: {
         type: String,
         unique: true
@@ -29,7 +30,7 @@ var schema = new mongoose.Schema({
         select: false
     },
     following: {
-        type: [Number],
+        type: [String],
         ref: 'User'
     },
     posts: [{
@@ -88,17 +89,28 @@ schema.methods.correctPassword = function(candidatePassword) {
     return encryptPassword(candidatePassword, this.salt) === this.password;
 }
 
+
 schema.methods.getFeed = function() {
-    return this.model('User').populate(this, { path: 'following'})
-        .then( user => {
-            var friendsPosts = _.pluck(user.following, 'posts')
-            return _.chain(friendsPosts)
-                            .flatten()
-                            .sortBy('date')
-                            .reverse()
-            
+    return this.model('User').populate(this, { path: 'following' })
+        .then( (user) => {
+            return Promise.map( user.following, (followedUser) => {
+                return this.model('User').populate(followedUser, {path: 'posts.menuItem'})
+            })
+        }).then( (followedUsers) => {
+            var feed = followedUsers.map( (followedUser) => {
+                return followedUser.posts.map( (post) => { 
+                    post = post.toJSON()
+                    post.user = followedUser.username;
+                    return post;
+                })
+            })
+            return _.chain(feed)
+                    .flatten()
+                    .sortBy('date')
+                    .reverse()
         })
 }
+
 
 schema.methods.getFollowers = function() {
     return this.model('User').find({ following: this._id})

@@ -4,6 +4,7 @@ var Button = require('./react-native-button');
 var Play = require('./game-play');
 var Feed = require('./feed');
 var api = require('./utils/api');
+var Home = require('./home-screen-2.js')
 var {
   StyleSheet,
   View,
@@ -11,7 +12,8 @@ var {
   Image,
   NavigatorIOS,
   TouchableOpacity,
-  AsyncStorage
+  AsyncStorage,
+  TabBarIOS
 } = React;
 
 
@@ -20,11 +22,28 @@ var Homescreen = React.createClass({
     return {
       isLoading: true,
       isLoggedIn: false,
+      selectedTab: 'nomz',
       user: null,
     }
   },
 
-
+  // On mount, check for user in Async Storage and update state accordingly
+  // componentWillMount() {
+  //   AsyncStorage.getItem('userId').then( val => {
+  //     if (!val) {
+  //       this.setState({
+  //         isLoading: false,
+  //         isLoggedIn: false
+  //       })
+  //     } else {
+  //       this.setState({
+  //         isLoading: false,
+  //         isLoggedIn: true,
+  //         user: val
+  //       })
+  //     }
+  //   })
+  // },
 
   componentWillMount() {
     console.log('mounting component...')
@@ -39,6 +58,28 @@ var Homescreen = React.createClass({
           isLoading: false
         })
       })
+  },
+
+  renderFeed() {
+    return (
+      <NavigatorIOS style={styles.container}
+        initialRoute={{
+          title: 'Feed',
+          component: Feed,
+          passProps: {user: this.state.user}
+        }} />
+    )
+  },
+
+  renderHome() {
+    return (
+      <NavigatorIOS style={styles.container}
+        initialRoute={{
+          title: 'Nomz!',
+          component: Home,
+          passProps: {user: this.state.user}
+        }} />
+    )
   },
 
 
@@ -79,11 +120,9 @@ var Homescreen = React.createClass({
   },
 
   logout() {
-    // send logout request 
-    // TO DO: Better error handling
+    // send logout request
     api.logout().then( res => {
       if (res.status === 200) {
-        // remove user id from storage
         return AsyncStorage.removeItem('userId')
       }
     }).then( () => {
@@ -92,6 +131,10 @@ var Homescreen = React.createClass({
        this.setState({isLoggedIn: false, user: null});
        this.goToLogin()
      }).done()
+  },
+
+    setTab(tabId) {
+    this.setState({ selectedTab: tabId })
   },
 
   render() {
@@ -139,27 +182,39 @@ var Homescreen = React.createClass({
 
     }
     return (
-      <View style={styles.container}>
-      <Image source={{ uri: "nomz" , isStatic: true }} style={styles.bgImg} />
-        <View style={{ marginTop: 65, backgroundColor: 'transparent' }}></View>
-        <View style={styles.box}></View>
-        <View style={styles.box}>
-          <Button
-            style={styles.btn}
-            onPress={this.playGame}>
-            {"Play Nomz!"}
-          </Button>
-          { feedButton }
-          { profileButton }
-          { authButton }
-        </View>
-      </View>
+
+          <TabBarIOS tintColor='red' >
+            <TabBarIOS.Item
+              systemIcon='history'
+              selected={ this.state.selectedTab === 'feed'}
+              onPress={ () => this.setTab('feed') }>
+              {this.renderFeed()}
+            </TabBarIOS.Item>
+
+            <TabBarIOS.Item
+              systemIcon='search'
+              selected={ this.state.selectedTab === 'nomz'}
+              onPress={ () => this.setTab('nomz') }>
+ 
+              {this.renderHome()}
+
+            </TabBarIOS.Item>
+
+            <TabBarIOS.Item
+              systemIcon='more'
+              selected={ this.state.selectedTab === 'profile'}
+              onPress={ () => this.setTab('profile') }>
+              <View></View>
+            </TabBarIOS.Item>
+
+        </TabBarIOS>
+
     )
   }
 });
 
 Homescreen.propTypes = {
-  userId: React.PropTypes.string.isRequired
+  userId: React.PropTypes.object.isRequired
 }
 
 var styles = StyleSheet.create({
