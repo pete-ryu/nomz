@@ -17,6 +17,7 @@ var api = {
     };
     return fetch(LOGIN_URL, config).then( (res) => {
       if (res.status !== 200) {
+        console.log(res)
         // If no 200, then just throw an error to reject the promise
         let err = new Error(res);
         err.message = 'Bad Login'

@@ -57,21 +57,9 @@ class Profile extends Component {
       })
   }
 
-  _onUserItemPress(userData) {
-    this.props.navigator.push({
-      component: this,
-      passProps: {
-        user: userData
-      }
-    })
-  }
-
 
   render() {
     // var user = this.state.user || null
-
-    // console.log('in Profile. State:', this.state);
-    // console.log('in Profile. Props:', this.props);
     if (!this.props.user) {
       return (
              <View style={styles.loading}>
@@ -129,7 +117,6 @@ class Profile extends Component {
         <Image source={{ uri: "nomz" , isStatic: true }} style={styles.bgImg} />
         {header}
         <ScrollableTabView
-          tabBarUnderlineColor={"red"}
           tabBarActiveTextColor={Colors.red}
           >
           <ScrollView tabLabel='Posts' contentContainerStyle={styles.tabView}>
@@ -205,7 +192,6 @@ var styles = StyleSheet.create({
     flex: 1,
     // justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: 'black'
     // backgroundColor: 'rgba(2, 2, 2, 0.6)'
   },
     bgImg: {

@@ -65,6 +65,8 @@ class Feed extends Component{
   }
 
   _renderPost(data) {
+    // console.log(this.props)
+    // console.log(data)
     // return a view with the passed in data
     return (
       <Post postData={data} />
@@ -72,6 +74,8 @@ class Feed extends Component{
   }
 
   render() {
+    console.log('feed State:', this.state);
+    console.log('feed Props:', this.props)
     return (
       <View style={styles.container}>
         <Image source={{ uri: "nomz" , isStatic: true }} style={styles.bgImg} />
