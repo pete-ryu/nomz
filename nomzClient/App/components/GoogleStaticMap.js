@@ -41,7 +41,7 @@ class GoogleStaticMap extends Component {
         return d * 26;
     }
 
-    get view() {
+    render() {
         return (
             <View>
         	   <Image style={styles.map} source={{ uri: this.url }} />
