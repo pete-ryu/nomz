@@ -36,7 +36,7 @@ class VenueInfo extends Component {
         }
     }
 
-    get view() {
+    render() {
         // foursquare api is inconsistent with some of the fields: address, contact, url, etc.
         // rather than showing undefined, add them only if they actually exists
         let venAddress = [],

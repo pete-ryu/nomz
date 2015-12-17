@@ -30,28 +30,21 @@ class GameResultDetails extends Component {
 
     render() {
         let venue = this.state.venue,
-            gMap = new GoogleStaticMap({
-                xStart: this.state.lat,
-                yStart: this.state.long,
-                xEnd: venue.location.lat,
-                yEnd: venue.location.lng
-            }),
-            vGallery = new VenueGallery({ photos: venue.details.photos.groups[0].items.map(e => {
-                return e.prefix + 'width300' + e.suffix;
-            }) }),
             vInfo = new VenueInfo(venue);
 
         return (
             <View style={styles.container}>
                 <ScrollableTabView>
                     <View tabLabel="Info" style={styles.tabContainer}>
-                        { vInfo.view }
+                        <VenueInfo {...venue} />
                     </View>
                     <View tabLabel="Gallery" style={styles.tabContainer}>
-                        { vGallery.view }
+                        <VenueGallery photos={ venue.details.photos.groups[0].items.map(e => {
+                            return e.prefix + 'width300' + e.suffix;
+                        }) }/>
                     </View>
                     <View tabLabel="Directions" style={styles.tabContainer}>
-                        { gMap.view }
+                        <GoogleStaticMap xStart={ this.state.lat } yStart={ this.state.long} xEnd={ venue.location.lat } yEnd={venue.location.lng} />
                     </View>
                 </ScrollableTabView>
             </View>

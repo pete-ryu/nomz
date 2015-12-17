@@ -7,7 +7,9 @@ var React = require('react-native'),
         StyleSheet,
         Image,
         ListView,
-        View
+        View,
+        TouchableOpacity,
+        Modal
     } = React,
     deviceWidth = Dimensions.get('window').width,
     deviceHeight = Dimensions.get('window').height;
@@ -20,20 +22,53 @@ class VenueGallery extends Component {
         var ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 !== r2
         });
-        
+
         this.state = {
-            dataSource: ds.cloneWithRows(props.photos)
+            dataSource: ds.cloneWithRows(props.photos),
+            animated: true,
+            modalVisible: false,
+            transparent: false
         }
     }
 
-    get view() {
+    _setModalVisible(visible, imageUrl) {
+        this.setState({
+            modalVisible: visible,
+            imageUrl: imageUrl
+        });
+    }
+
+    _toggleAnimated() {
+        this.setState({
+            animated: !this.state.animated
+        });
+    }
+
+    _toggleTransparent() {
+        this.setState({
+            transparent: !this.state.transparent
+        });
+    }
+
+    render() {
         return (
             <View style={styles.container}>
-		            <ListView contentContainerStyle={styles.list}
-					        dataSource={this.state.dataSource}
-					        renderRow={(rowData) => <Image style={styles.item} source={{ uri: rowData }} /> }
-					/>
-            </View>     
+                <Modal  animated={this.state.animated}
+                        transparent={this.state.transparent}
+                        visible={this.state.modalVisible}>
+                    <View>
+                        <TouchableOpacity onPress={ this._setModalVisible.bind(this, false) }>
+                            <Image style={{ height: deviceHeight, width: deviceWidth }} resizeMode={ Image.resizeMode.contain } source={{ uri: this.state.imageUrl }} />
+                        </TouchableOpacity>
+                    </View>
+                </Modal>
+                <ListView contentContainerStyle={styles.list}
+                    dataSource={this.state.dataSource}
+                    renderRow={(rowData) =>
+                    <TouchableOpacity onPress={ this._setModalVisible.bind(this, true, rowData) }>
+                        <Image style={styles.item} source={{ uri: rowData }} />
+                    </TouchableOpacity> } />
+            </View>
         );
     }
 }
