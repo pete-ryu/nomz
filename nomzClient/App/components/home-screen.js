@@ -4,8 +4,8 @@ var Button = require('./react-native-button');
 var Play = require('./game-play-screen');
 var Feed = require('./feed');
 var api = require('./utils/api');
-var PhotoUpload = require('./camera-roll-select-screen');
-var Camera = require('./camera-app');
+var PhotoUpload = require('./camera/camera-roll-select-screen');
+var Camera = require('./camera/camera-app');
 
 var {
   StyleSheet,

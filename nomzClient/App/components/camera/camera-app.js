@@ -8,7 +8,7 @@ var {
   TouchableOpacity
 } = React;
 var Camera = require('react-native-camera');
-var Button = require('./react-native-button');
+var Button = require('../react-native-button');
 
 
 var cameraApp = React.createClass({
@@ -28,10 +28,10 @@ var cameraApp = React.createClass({
         type={this.state.cameraType}
       >
         <TouchableOpacity style={styles.bottomL} onPress={this._switchCamera}>
-          <Image source={require('../images/camera-rotate-icon.png')}/>
+          <Image source={require('../../images/camera-rotate-icon.png')}/>
         </TouchableOpacity>
         <TouchableOpacity style={styles.bottomR} onPress={this._takePicture}>
-          <Image source={require('../images/camera-icon.png')}/>
+          <Image source={require('../../images/camera-icon.png')}/>
         </TouchableOpacity>
       </Camera>
     );

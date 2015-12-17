@@ -1,6 +1,6 @@
 const React = require('react-native');
-
 const postUrl = "http://localhost:1337/api/upload";
+const Uploader = require('./image-upload');
 
 const {
   AppRegistry,
@@ -9,9 +9,9 @@ const {
   View,
   ScrollView,
   Image,
-  CameraRoll,
   TouchableHighlight,
   NativeModules,
+  CameraRoll
 } = React;
 
 const reactImageProject = React.createClass({
@@ -43,22 +43,29 @@ const reactImageProject = React.createClass({
 
   selectImage(uri) {
     console.log("URI: ", uri);
-    NativeModules.ReadImageData.readImageFull(uri, (image) => {
-      this.setState({
-        selected: image,
-      });
-
-      fetch(postUrl, {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ user: this.props.user, image: image })
-      })
-      // .then((res) => res.json())
+    this.props.navigator.push({
+      title: 'Post a Pic',
+      component: Uploader,
+      backButtonTitle: ' ',
+      passProps: { user: this.props.user, imgUri: uri }
     });
-    console.log(uri);
+
+    // NativeModules.ReadImageData.readImageFull(uri, (image) => {
+    //   this.setState({
+    //     selected: image,
+    //   });
+    //
+    //   fetch(postUrl, {
+    //     method: 'POST',
+    //     headers: {
+    //       'Accept': 'application/json',
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({ user: this.props.user, image: image })
+    //   })
+    //   // .then((res) => res.json())
+    // });
+    // console.log(uri);
   },
 
   render() {
