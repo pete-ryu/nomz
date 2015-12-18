@@ -21,7 +21,7 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 class Post extends Component{
 
   render() {
-    let nomz = (<Icon  style={styles.nomzIcon} name='room-service' size={20} color='white' />)
+    let nomz = (<Icon  style={styles.nomzIcon} name='room_service' size={20} color='white' />)
 
     let postUser
     if (this.props.postData.user) {
